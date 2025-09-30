@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guardia.Consola", "Guardia.Consola\Guardia.Consola.csproj", "{0FA1F11B-5656-419B-B926-25D19B910A14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guardia.Bdd", "Guardia.Bdd\Guardia.Bdd.csproj", "{F023F394-022E-421F-98C4-BFC00B05BA15}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FA1F11B-5656-419B-B926-25D19B910A14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FA1F11B-5656-419B-B926-25D19B910A14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FA1F11B-5656-419B-B926-25D19B910A14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FA1F11B-5656-419B-B926-25D19B910A14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F023F394-022E-421F-98C4-BFC00B05BA15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F023F394-022E-421F-98C4-BFC00B05BA15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F023F394-022E-421F-98C4-BFC00B05BA15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F023F394-022E-421F-98C4-BFC00B05BA15}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7F926D28-18B5-4FDE-B766-AC015E741996}
+	EndGlobalSection
+EndGlobal

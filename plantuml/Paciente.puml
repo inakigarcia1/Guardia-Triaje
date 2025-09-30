@@ -1,0 +1,12 @@
+@startuml
+class Paciente {
+    + Esperar() : void
+}
+class "List`1"<T> {
+}
+Persona <|-- Paciente
+Paciente --> "Enfermero" Enfermero
+Paciente --> "Medico" Medico
+Paciente --> "Triage" Triage
+Paciente --> "Atenciones<Atencion>" "List`1"
+@enduml

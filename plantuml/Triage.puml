@@ -1,0 +1,5 @@
+@startuml
+class Triage {
+}
+Triage --> "Prioridad" PrioridadTriage
+@enduml

@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Entities\Aplicacion\Controladores\**" />
+    <Compile Remove="Entities\Aplicacion\Gestores\**" />
+    <EmbeddedResource Remove="Entities\Aplicacion\Controladores\**" />
+    <EmbeddedResource Remove="Entities\Aplicacion\Gestores\**" />
+    <None Remove="Entities\Aplicacion\Controladores\**" />
+    <None Remove="Entities\Aplicacion\Gestores\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+</Project>
