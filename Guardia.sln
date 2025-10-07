@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guardia.Dominio", "src\Guar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guardia.Infraestructura", "src\Guardia.Infraestructura\Guardia.Infraestructura.csproj", "{03136672-6DB6-4BEB-9ED2-E5C57B4F966B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guardia.Api", "Guardia.Api\Guardia.Api.csproj", "{06DF6E3C-124F-4328-9AE6-FBA42EA7469D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guardia.Api", "src\Guardia.Api\Guardia.Api.csproj", "{06DF6E3C-124F-4328-9AE6-FBA42EA7469D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

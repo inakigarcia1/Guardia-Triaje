@@ -5,7 +5,6 @@ using Guardia.Dominio.Entidades.Personal;
 using Guardia.Dominio.Entidades.Triajes;
 using Guardia.Dominio.Repositorios;
 using Guardia.Infraestructura.Repositorios;
-using Xunit;
 
 namespace Guardia.Tests;
 

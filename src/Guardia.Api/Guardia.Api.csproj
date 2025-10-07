@@ -11,9 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Guardia.Aplicacion\Guardia.Aplicacion.csproj" />
-    <ProjectReference Include="..\src\Guardia.Dominio\Guardia.Dominio.csproj" />
-    <ProjectReference Include="..\src\Guardia.Infraestructura\Guardia.Infraestructura.csproj" />
+    <ProjectReference Include="..\Guardia.Aplicacion\Guardia.Aplicacion.csproj" />
+    <ProjectReference Include="..\Guardia.Infraestructura\Guardia.Infraestructura.csproj" />
   </ItemGroup>
 
 </Project>

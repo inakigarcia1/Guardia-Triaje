@@ -1,33 +1,40 @@
-﻿using Guardia.Aplicacion.Servicios;
-using Guardia.Dominio.Repositorios;
-using Guardia.Infraestructura.Repositorios;
+using Guardia.Aplicacion;
+using Guardia.Infraestructura;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace Guardia.Api;
 
-// Add services to the container.
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// Register repositories
-builder.Services.AddScoped<IRepositorioPaciente, RepositorioPacienteEnMemoria>();
-builder.Services.AddScoped<IRepositorioIngreso, RepositorioIngresoEnMemoria>();
-builder.Services.AddScoped<IRepositorioEnfermero, RepositorioEnfermeroEnMemoria>();
-
-// Register services
-builder.Services.AddScoped<IngresoService>();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+public class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        // Add services to the container.
+
+        builder.Services.AddControllers();
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+
+        builder.Services
+            .AgregarInfraestructura()
+            .AgregarAplicacion();
+
+        var app = builder.Build();
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
+    }
 }
-
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
-
-app.Run();

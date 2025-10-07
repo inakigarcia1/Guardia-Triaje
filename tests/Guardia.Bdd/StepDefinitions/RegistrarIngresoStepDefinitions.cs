@@ -1,4 +1,3 @@
-using Reqnroll;
 using Microsoft.Extensions.DependencyInjection;
 using Guardia.Aplicacion.Servicios;
 using Guardia.Dominio.Entidades.Triajes;
@@ -6,7 +5,6 @@ using Guardia.Dominio.Entidades.Personal;
 using Guardia.Dominio.Entidades;
 using Guardia.Dominio.Repositorios;
 using Guardia.Infraestructura.Repositorios;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Guardia.Aplicacion.DTOs;
 
 namespace Guardia.Bdd.StepDefinitions;
