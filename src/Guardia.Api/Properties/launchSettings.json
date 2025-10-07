@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Guardia.Consola": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:57449;http://localhost:57450"
+    }
+  }
+}
