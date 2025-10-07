@@ -10,7 +10,6 @@ public class Atencion
     public string Observaciones { get; set; }
     public Ingreso Ingreso { get; set; }
     public Medico Medico { get; set; }
-    public Derivacion? Derivacion { get; set; }
 
     public TimeSpan ObtenerTiempoDeAtencion() => Fin - Inicio;
 }

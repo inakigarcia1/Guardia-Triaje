@@ -7,9 +7,9 @@ public static class InyeccionInfraestructura
 {
     public static IServiceCollection AgregarInfraestructura(this IServiceCollection services)
     {
-        services.AddScoped<IRepositorioPaciente, RepositorioPacienteEnMemoria>();
-        services.AddScoped<IRepositorioIngreso, RepositorioIngresoEnMemoria>();
-        services.AddScoped<IRepositorioEnfermero, RepositorioEnfermeroEnMemoria>();
+        services.AddSingleton<IRepositorioPaciente, RepositorioPacienteEnMemoria>();
+        services.AddSingleton<IRepositorioIngreso, RepositorioIngresoEnMemoria>();
+        services.AddSingleton<IRepositorioEnfermero, RepositorioEnfermeroEnMemoria>();
         return services;
     }
 }
