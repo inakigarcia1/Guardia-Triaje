@@ -1,0 +1,88 @@
+name: .NET CI
+
+on:
+  push:
+    branches: [ "**" ]
+    paths:
+      - "**/*.sln"
+      - "src/**"
+      - "tests/**"
+      - ".github/workflows/**"
+  pull_request:
+    branches: [ "**" ]
+    paths:
+      - "**/*.sln"
+      - "src/**"
+      - "tests/**"
+      - ".github/workflows/**"
+
+permissions:
+  checks: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detectar solución
+        id: sln
+        shell: bash
+        run: |
+          SOLUTION_FILE="$(git ls-files '*.sln' | head -n 1)"
+          if [ -z "$SOLUTION_FILE" ]; then
+            echo "No se encontró .sln en el repo" >&2
+            exit 1
+          fi
+          echo "SOLUTION_FILE=$SOLUTION_FILE" >> $GITHUB_ENV
+          echo "Usando solución: $SOLUTION_FILE"
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            6.0.x
+
+      - name: Cache de NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore
+        run: dotnet restore "${{ env.SOLUTION_FILE }}"
+
+      - name: Build (Release)
+        run: dotnet build "${{ env.SOLUTION_FILE }}" --configuration Release --no-restore
+
+      - name: Test (TRX + cobertura)
+        run: |
+          dotnet test "${{ env.SOLUTION_FILE }}" \
+            --configuration Release \
+            --no-build \
+            --logger "trx;LogFileName=test_results.trx" \
+            --collect "XPlat Code Coverage"
+      
+      - name: Subir artefactos de test
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            **/TestResults/*.trx
+            **/TestResults/**/coverage.cobertura.xml
+
+      - name: Publicar reporte de tests (anotaciones)
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Tests .NET
+          path: "**/TestResults/*.trx"
+          reporter: dotnet-trx
