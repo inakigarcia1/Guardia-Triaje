@@ -26,8 +26,8 @@ namespace Guardia.Bdd.Features
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Registrar Ingreso", "  Como enfermera\r\n  Quiero poder registrar las admisiones de los pacientes a urge" +
-                "ncias\r\n  Para determinar que pacientes tienen mayor prioridad de atención", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Registrar Ingreso", ("  Como enfermera\r\n  Quiero poder registrar las admisiones de los pacientes a urge" +
+                "ncias\r\n  Para determinar que pacientes tienen mayor prioridad de atención"), global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
@@ -325,8 +325,8 @@ await this.FeatureBackgroundAsync();
  await testRunner.WhenAsync("la enfermera intenta registrar un ingreso con frecuencia cardíaca \"-10\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 56
- await testRunner.ThenAsync("se emite un mensaje de error indicando que la frecuencia cardíaca no puede ser ne" +
-                        "gativa", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync(("se emite un mensaje de error indicando que la frecuencia cardíaca no puede ser ne" +
+                        "gativa"), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -363,8 +363,8 @@ await this.FeatureBackgroundAsync();
  await testRunner.WhenAsync("la enfermera intenta registrar un ingreso con frecuencia respiratoria \"-5\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 62
- await testRunner.ThenAsync("se emite un mensaje de error indicando que la frecuencia respiratoria no puede se" +
-                        "r negativa", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync(("se emite un mensaje de error indicando que la frecuencia respiratoria no puede se" +
+                        "r negativa"), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -444,8 +444,8 @@ await this.FeatureBackgroundAsync();
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 76
- await testRunner.AndAsync("el paciente B está en espera con nivel de emergencia \"Critico\" desde hace 10 minu" +
-                        "tos", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync(("el paciente B está en espera con nivel de emergencia \"Critico\" desde hace 10 minu" +
+                        "tos"), ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 77
  await testRunner.WhenAsync("la enfermera registra un ingreso para el paciente A con nivel \"Critico\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
