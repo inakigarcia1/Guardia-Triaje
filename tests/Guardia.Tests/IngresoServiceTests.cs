@@ -31,7 +31,7 @@ public class IngresoServiceTests
         await CrearPacienteYEnfermero();
         var request = new RegistroIngresoRequest
         {
-            CuilPaciente = "12345678",
+            CuilPaciente = "20123456789",
             NombrePaciente = _nombrePaciente,
             Informe = "Dolor de pecho intenso",
             NivelEmergencia = PrioridadTriaje.Critico,
@@ -60,7 +60,7 @@ public class IngresoServiceTests
         await CrearEnfermero();
         var request = new RegistroIngresoRequest
         {
-            CuilPaciente = "99999999",
+            CuilPaciente = "20123456785",
             NombrePaciente = "Santino Hamada",
             Informe = "Dolor de pecho",
             NivelEmergencia = PrioridadTriaje.Critico,

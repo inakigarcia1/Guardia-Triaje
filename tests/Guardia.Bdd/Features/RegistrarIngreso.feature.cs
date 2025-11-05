@@ -148,7 +148,7 @@ this.ScenarioInitialize(scenarioInfo);
 await this.FeatureBackgroundAsync();
 #line hidden
 #line 16
- await testRunner.GivenAsync("que existe un paciente con CUIL \"12345678\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+ await testRunner.GivenAsync("que existe un paciente con CUIL \"20123456789\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 17
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
@@ -212,7 +212,7 @@ this.ScenarioInitialize(scenarioInfo);
 await this.FeatureBackgroundAsync();
 #line hidden
 #line 31
- await testRunner.GivenAsync("que no existe un paciente con CUIL \"87654321\" y nombre \"Santino Hamada\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+ await testRunner.GivenAsync("que no existe un paciente con CUIL \"22123456780\" y nombre \"Santino Hamada\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 32
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
@@ -279,7 +279,7 @@ this.ScenarioInitialize(scenarioInfo);
 await this.FeatureBackgroundAsync();
 #line hidden
 #line 47
- await testRunner.GivenAsync("que existe un paciente con CUIL \"12345678\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+ await testRunner.GivenAsync("que existe un paciente con CUIL \"20123456789\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 48
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
@@ -316,7 +316,7 @@ this.ScenarioInitialize(scenarioInfo);
 await this.FeatureBackgroundAsync();
 #line hidden
 #line 53
- await testRunner.GivenAsync("que existe un paciente con CUIL \"12345678\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+ await testRunner.GivenAsync("que existe un paciente con CUIL \"20123456789\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 54
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
@@ -354,7 +354,7 @@ this.ScenarioInitialize(scenarioInfo);
 await this.FeatureBackgroundAsync();
 #line hidden
 #line 59
- await testRunner.GivenAsync("que existe un paciente con CUIL \"12345678\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+ await testRunner.GivenAsync("que existe un paciente con CUIL \"20123456789\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 60
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
@@ -392,10 +392,10 @@ this.ScenarioInitialize(scenarioInfo);
 await this.FeatureBackgroundAsync();
 #line hidden
 #line 65
- await testRunner.GivenAsync("que existe un paciente A con CUIL \"11111111\" y nombre \"Ana García\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+ await testRunner.GivenAsync("que existe un paciente A con CUIL \"20451954270\" y nombre \"Ana García\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 66
- await testRunner.AndAsync("que existe un paciente B con CUIL \"22222222\" y nombre \"Carlos López\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("que existe un paciente B con CUIL \"22451954275\" y nombre \"Carlos López\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 67
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
@@ -435,10 +435,10 @@ this.ScenarioInitialize(scenarioInfo);
 await this.FeatureBackgroundAsync();
 #line hidden
 #line 73
- await testRunner.GivenAsync("que existe un paciente A con CUIL \"11111111\" y nombre \"Ana García\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+ await testRunner.GivenAsync("que existe un paciente A con CUIL \"20451954270\" y nombre \"Ana García\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 74
- await testRunner.AndAsync("que existe un paciente B con CUIL \"22222222\" y nombre \"Carlos López\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("que existe un paciente B con CUIL \"22451954275\" y nombre \"Carlos López\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 75
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");

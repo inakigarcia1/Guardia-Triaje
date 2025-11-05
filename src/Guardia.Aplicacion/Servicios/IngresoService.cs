@@ -50,7 +50,7 @@ public class IngresoService
             var paciente = await _repositorioPaciente.ObtenerPorCuilAsync(request.CuilPaciente);
             if (paciente is null)
             {
-                paciente = new(request.CuilPaciente, request.NombrePaciente);
+                paciente = new Paciente(request.CuilPaciente, request.NombrePaciente);
                 await _repositorioPaciente.CrearAsync(paciente);
             }
 
@@ -65,19 +65,17 @@ public class IngresoService
                     Diastolica = request.TensionDiastolica
                 },
                 paciente: paciente,
-                enfermero: enfermero
-                )
-            {
-                Informe = request.Informe
-            }
-                ;
+                enfermero: enfermero)
+                {
+                    Informe = request.Informe
+                };
 
             // Guardar ingreso
             await _repositorioIngreso.CrearAsync(ingreso);
 
-            return new ResultadoIngreso 
-            { 
-                EsExitoso = true, 
+            return new ResultadoIngreso
+            {
+                EsExitoso = true,
                 Ingreso = ingreso,
                 Mensaje = "Ingreso registrado correctamente"
             };
@@ -101,7 +99,7 @@ public class IngresoService
         if (string.IsNullOrWhiteSpace(request.MatriculaEnfermero))
             return new ValidacionResultado { EsValido = false, MensajeError = "La matrícula del enfermero es obligatoria" };
 
-        if(string.IsNullOrWhiteSpace(request.NombrePaciente))
+        if (string.IsNullOrWhiteSpace(request.NombrePaciente))
             return new ValidacionResultado { EsValido = false, MensajeError = "El nombre del paciente es obligatorio" };
 
         return new ValidacionResultado { EsValido = true };

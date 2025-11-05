@@ -22,6 +22,7 @@ public class RegistrarIngresoStepDefinitions
     private Enfermero? _enfermeroActual;
     private string _cuilPacienteActual;
     private string _nombrePaciente;
+    private string _cuilPacienteInexistente;
 
     public RegistrarIngresoStepDefinitions()
     {
@@ -64,6 +65,7 @@ public class RegistrarIngresoStepDefinitions
     public void GivenQueNoExisteUnPacienteConCUILYNombre(string cuil, string nombre)
     {
         _nombrePaciente = nombre;
+        _cuilPacienteInexistente = cuil;
     }
 
 
@@ -122,7 +124,7 @@ public class RegistrarIngresoStepDefinitions
     public async Task DadoElPacienteBEstaEnEsperaConNivelDeEmergencia(string nivel)
     {
         var pacienteB = new Paciente(
-            cuil: "22222222",
+            cuil: "20123456789",
             nombre: "Carlos",
             apellido: "López",
             email: "mail3@mail.com",
@@ -154,7 +156,7 @@ public class RegistrarIngresoStepDefinitions
     public async Task DadoElPacienteBEstaEnEsperaConNivelDeEmergenciaDesdeHaceMinutos(string nivel, int minutos)
     {
         var pacienteB = new Paciente(
-            cuil: "22222222",
+            cuil: "20123456789",
             nombre: "Carlos",
             apellido: "López",
             email: "mail3@mail.com",
@@ -189,11 +191,11 @@ public class RegistrarIngresoStepDefinitions
     [When(@"la enfermera registra un ingreso para el paciente con:")]
     public async Task CuandoLaEnfermeraRegistraUnIngresoParaElPacienteCon(Table table)
     {
-        _pacienteActual ??= new Paciente(_cuilPacienteActual, _nombrePaciente);
+        _pacienteActual ??= new Paciente(_cuilPacienteActual ?? _cuilPacienteInexistente, _nombrePaciente);
 
         var request = new RegistroIngresoRequest
         {
-            CuilPaciente = _cuilPacienteActual,
+            CuilPaciente = _cuilPacienteActual ?? _cuilPacienteInexistente,
             NombrePaciente = _pacienteActual.Nombre,
             MatriculaEnfermero = "ENF001"
         };
@@ -308,7 +310,7 @@ public class RegistrarIngresoStepDefinitions
     {
         var request = new RegistroIngresoRequest
         {
-            CuilPaciente = "11111111",
+            CuilPaciente = "22451954275",
             NombrePaciente = _nombrePaciente,
             MatriculaEnfermero = "ENF001",
             Informe = "Dolor de pecho",
@@ -374,8 +376,8 @@ public class RegistrarIngresoStepDefinitions
     public async Task EntoncesElPacienteADebeSerAtendidoAntesQueElPacienteB()
     {
         var cola = await _ingresoService!.ObtenerColaAtencionAsync();
-        var pacienteA = cola.FirstOrDefault(i => i.Paciente.Cuil.Equals("11111111"));
-        var pacienteB = cola.FirstOrDefault(i => i.Paciente.Cuil.Equals("22222222"));
+        var pacienteA = cola.FirstOrDefault(i => i.Paciente.Cuil.Equals("22451954275"));
+        var pacienteB = cola.FirstOrDefault(i => i.Paciente.Cuil.Equals("20123456789"));
 
         Assert.NotNull(pacienteA);
         Assert.NotNull(pacienteB);
@@ -390,8 +392,8 @@ public class RegistrarIngresoStepDefinitions
     public async Task EntoncesElPacienteBDebeSerAtendidoAntesQueElPacienteA()
     {
         var cola = await _ingresoService!.ObtenerColaAtencionAsync();
-        var pacienteA = cola.FirstOrDefault(i => i.Paciente.Cuil.Equals("11111111"));
-        var pacienteB = cola.FirstOrDefault(i=> i.Paciente.Cuil.Equals("22222222"));
+        var pacienteA = cola.FirstOrDefault(i => i.Paciente.Cuil.Equals("22451954275"));
+        var pacienteB = cola.FirstOrDefault(i=> i.Paciente.Cuil.Equals("20123456789"));
 
         Assert.NotNull(pacienteA);
         Assert.NotNull(pacienteB);
