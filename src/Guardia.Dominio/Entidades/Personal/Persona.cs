@@ -1,13 +1,20 @@
 ﻿namespace Guardia.Dominio.Entidades.Personal;
 public abstract class Persona
 {
-    public ulong Dni {  get; set; }
-    public ulong Cuil { get; set; }
-    public DateTime FechaNacimiento { get; set; }
-    public string Email { get; set; }
-    public ulong Telefono { get; set; }
-    public string NombreCompleto { get; set; }
-    public string Direccion {  get; set; }
-    public string Provincia { get; set; }
-    public string Pais { get; set; }
+    public string Cuil { get; set; }
+    public string Nombre { get; set; }
+    public string Apellido { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    protected Persona(string cuil, string nombre, string apellido, string email)
+    {
+        Cuil = cuil;
+        Nombre = nombre;
+        Apellido = apellido;
+        Email = email;
+    }
+    protected Persona(string cuil, string nombre)
+    {
+        Cuil = cuil;
+        Nombre = nombre;
+    }
 }

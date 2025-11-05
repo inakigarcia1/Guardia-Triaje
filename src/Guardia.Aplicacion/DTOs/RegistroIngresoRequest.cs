@@ -4,11 +4,11 @@ namespace Guardia.Aplicacion.DTOs;
 
 public class RegistroIngresoRequest
 {
-    public ulong DniPaciente { get; set; }
+    public string CuilPaciente { get; set; } = string.Empty;
     public string NombrePaciente { get; set; } = string.Empty;
     public string Informe { get; set; } = string.Empty;
     public PrioridadTriaje NivelEmergencia { get; set; }
-    public float? Temperatura { get; set; }
+    public float Temperatura { get; set; }
     public float FrecuenciaCardiaca { get; set; }
     public float FrecuenciaRespiratoria { get; set; }
     public float TensionSistolica { get; set; }

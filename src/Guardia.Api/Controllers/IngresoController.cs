@@ -34,8 +34,8 @@ public class IngresoController : ControllerBase
                 fechaIngreso = resultado.Ingreso.FechaIngreso,
                 paciente = new
                 {
-                    dni = resultado.Ingreso.Paciente.Dni,
-                    nombre = resultado.Ingreso.Paciente.NombreCompleto
+                    cuil = resultado.Ingreso.Paciente.Cuil,
+                    nombre = resultado.Ingreso.Paciente.Nombre
                 },
                 nivelEmergencia = new
                 {
@@ -47,7 +47,7 @@ public class IngresoController : ControllerBase
                 enfermero = new
                 {
                     matricula = resultado.Ingreso.Enfermero.Matricula,
-                    nombre = resultado.Ingreso.Enfermero.NombreCompleto
+                    nombre = resultado.Ingreso.Enfermero.Nombre
                 }
             }
         });
@@ -64,8 +64,8 @@ public class IngresoController : ControllerBase
             fechaIngreso = i.FechaIngreso,
             paciente = new
             {
-                dni = i.Paciente.Dni,
-                nombre = i.Paciente.NombreCompleto
+                cuil = i.Paciente.Cuil,
+                nombre = i.Paciente.Nombre
             },
             nivelEmergencia = new
             {

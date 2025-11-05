@@ -5,11 +5,11 @@ namespace Guardia.Infraestructura.Repositorios;
 
 public class RepositorioPacienteEnMemoria : IRepositorioPaciente
 {
-    private readonly List<Paciente> _pacientes = new();
+    private readonly List<Paciente> _pacientes = [];
 
-    public Task<Paciente?> ObtenerPorDniAsync(ulong dni)
+    public Task<Paciente?> ObtenerPorCuilAsync(string cuil)
     {
-        var paciente = _pacientes.FirstOrDefault(p => p.Dni == dni);
+        var paciente = _pacientes.FirstOrDefault(p => p.Cuil.Equals(cuil, StringComparison.CurrentCultureIgnoreCase));
         return Task.FromResult(paciente);
     }
 

@@ -11,26 +11,12 @@ public class RepositorioEnfermeroEnMemoria : IRepositorioEnfermero
     {
         _enfermeros.AddRange(
             [
-
-            new Enfermero
-            {
-                Matricula = "ENF-2045"
-            },
-            new Enfermero
-            {
-                Matricula = "ENF-3129"
-            },
-            new Enfermero
-            {
-                Matricula = "ENF-1876"
-            },
-            new Enfermero
-            {
-                Matricula = "ENF-2754"
-            },
-
+                new Enfermero(cuil: "20451954270", nombre: "Eugenia", matricula: "ENF-2045"),
+                new Enfermero(cuil: "27389104562", nombre: "Carlos", matricula: "ENF-3129"),
+                new Enfermero(cuil: "23401237895", nombre: "Maria", matricula: "ENF-1876"),
+                new Enfermero(cuil: "30115698247", nombre: "Javier", matricula: "ENF-2754")
             ]
-            );
+        );
     }
 
     public Task<Enfermero?> ObtenerPorMatriculaAsync(string matricula)

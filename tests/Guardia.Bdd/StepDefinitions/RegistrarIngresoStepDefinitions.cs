@@ -6,6 +6,7 @@ using Guardia.Dominio.Entidades;
 using Guardia.Dominio.Repositorios;
 using Guardia.Infraestructura.Repositorios;
 using Guardia.Aplicacion.DTOs;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Guardia.Bdd.StepDefinitions;
 
@@ -19,7 +20,7 @@ public class RegistrarIngresoStepDefinitions
 
     private Paciente? _pacienteActual;
     private Enfermero? _enfermeroActual;
-    private ulong _dniPacienteActual;
+    private string _cuilPacienteActual;
     private string _nombrePaciente;
 
     public RegistrarIngresoStepDefinitions()
@@ -39,51 +40,64 @@ public class RegistrarIngresoStepDefinitions
     {
     }
 
-    [Given(@"que existe un paciente con DNI ""([^""]*)"" y nombre ""([^""]*)""")]
-    public async Task DadoQueExisteUnPacienteConDNIYNombre(string dni, string nombre)
+    [Given(@"que existe un paciente con CUIL ""([^""]*)"" y nombre ""([^""]*)""")]
+    public async Task DadoQueExisteUnPacienteConCUILYNombre(string cuil, string nombre)
     {
-        _dniPacienteActual = ulong.Parse(dni);
-        _pacienteActual = new Paciente
-        {
-            Dni = _dniPacienteActual,
-            NombreCompleto = nombre,
-            NumeroDeAfiliado = $"AF{dni}"
-        };
+        _cuilPacienteActual = cuil;
+
+        _pacienteActual = new Paciente(
+            cuil,
+            nombre,
+            apellido: "Pérez",
+            email: "mail@mail.com",
+            domicilio: new Domicilio("Italia", 500, "San Miguel de Tucuman"),
+            afiliado: new Afiliado(
+                new ObraSocial("OSDE"), $"AF{cuil}"
+                )
+            );
 
         var repositorioPaciente = _serviceProvider.GetRequiredService<IRepositorioPaciente>();
         await repositorioPaciente.CrearAsync(_pacienteActual);
     }
 
-    [Given("que no existe un paciente con DNI {string} y nombre {string}")]
-    public void GivenQueNoExisteUnPacienteConDNIYNombre(string dni, string nombre)
+    [Given("que no existe un paciente con CUIL {string} y nombre {string}")]
+    public void GivenQueNoExisteUnPacienteConCUILYNombre(string cuil, string nombre)
     {
         _nombrePaciente = nombre;
     }
 
 
-    [Given(@"que existe un paciente A con DNI ""([^""]*)"" y nombre ""([^""]*)""")]
-    public async Task DadoQueExisteUnPacienteAConDNIYNombre(string dni, string nombre)
+    [Given(@"que existe un paciente A con CUIL ""([^""]*)"" y nombre ""([^""]*)""")]
+    public async Task DadoQueExisteUnPacienteAConCUILYNombre(string cuil, string nombre)
     {
-        var pacienteA = new Paciente
-        {
-            Dni = ulong.Parse(dni),
-            NombreCompleto = nombre,
-            NumeroDeAfiliado = $"AF{dni}"
-        };
+        var pacienteA = new Paciente(
+            cuil,
+            nombre,
+            apellido: "Gallardo",
+            email: "mail2@mail.com",
+            domicilio: new Domicilio("España", 250, "San Miguel de Tucuman"),
+            afiliado: new Afiliado(
+                new ObraSocial("OSDE"), $"AF{cuil}"
+            )
+        );
         _nombrePaciente = nombre;
         var repositorioPaciente = _serviceProvider.GetRequiredService<IRepositorioPaciente>();
         await repositorioPaciente.CrearAsync(pacienteA);
     }
 
-    [Given(@"que existe un paciente B con DNI ""([^""]*)"" y nombre ""([^""]*)""")]
-    public async Task DadoQueExisteUnPacienteBConDNIYNombre(string dni, string nombre)
+    [Given(@"que existe un paciente B con CUIL ""([^""]*)"" y nombre ""([^""]*)""")]
+    public async Task DadoQueExisteUnPacienteBConCUILYNombre(string cuil, string nombre)
     {
-        var pacienteB = new Paciente
-        {
-            Dni = ulong.Parse(dni),
-            NombreCompleto = nombre,
-            NumeroDeAfiliado = $"AF{dni}"
-        };
+        var pacienteB = new Paciente(
+            cuil,
+            nombre,
+            apellido: "Véliz",
+            email: "mail3@mail.com",
+            domicilio: new Domicilio("Roca", 2500, "San Miguel de Tucuman"),
+            afiliado: new Afiliado(
+                new ObraSocial("OSDE"), $"AF{cuil}"
+            )
+        );
 
         var repositorioPaciente = _serviceProvider.GetRequiredService<IRepositorioPaciente>();
         await repositorioPaciente.CrearAsync(pacienteB);
@@ -92,13 +106,13 @@ public class RegistrarIngresoStepDefinitions
     [Given(@"que existe una enfermera con matrícula ""([^""]*)"" y nombre ""([^""]*)""")]
     public async Task DadoQueExisteUnaEnfermeraConMatriculaYNombre(string matricula, string nombre)
     {
-        _enfermeroActual = new Enfermero
-        {
-            Matricula = matricula,
-            NombreCompleto = nombre,
-            Dni = 12345678,
-            Cuil = 20123456789
-        };
+        _enfermeroActual = new Enfermero(
+            cuil: "20123456789",
+            nombre: nombre,
+            apellido: "González",
+            email: "matia.gonzales@mail.com",
+            matricula: matricula
+        );
 
         var repositorioEnfermero = _serviceProvider.GetRequiredService<IRepositorioEnfermero>();
         await repositorioEnfermero.CrearAsync(_enfermeroActual);
@@ -107,27 +121,28 @@ public class RegistrarIngresoStepDefinitions
     [Given(@"el paciente B está en espera con nivel de emergencia ""([^""]*)""")]
     public async Task DadoElPacienteBEstaEnEsperaConNivelDeEmergencia(string nivel)
     {
-        var pacienteB = new Paciente
-        {
-            Dni = 22222222,
-            NombreCompleto = "Carlos López",
-            NumeroDeAfiliado = "AF22222222"
-        };
+        var pacienteB = new Paciente(
+            cuil: "22222222",
+            nombre: "Carlos",
+            apellido: "López",
+            email: "mail3@mail.com",
+            domicilio: new Domicilio("Roca", 2500, "San Miguel de Tucuman"),
+            afiliado: new Afiliado(
+                new ObraSocial("OSDE"), $"AF-5021"
+            )
+        );
 
         var enfermero = _serviceProvider.GetRequiredService<IRepositorioEnfermero>().ObtenerTodosAsync().Result.First();
 
-        var ingresoB = new Ingreso
-        {
-            Paciente = pacienteB,
-            Enfermero = enfermero,
-            NivelEmergencia = CrearNivelEmergencia(nivel),
-            FechaIngreso = DateTime.Now.AddMinutes(-10),
-            Informe = "Dolor abdominal",
-            FrecuenciaCardiaca = 80,
-            FrecuenciaRespiratoria = 16,
-            TensionArterial = new TensionArterial { Sistolica = 120, Diastolica = 80 },
-            Estado = EstadoIngreso.PENDIENTE
-        };
+        var ingresoB = new Ingreso(
+            nivelEmergencia: NivelEmergencia.CrearNivelEmergencia(Enum.Parse<PrioridadTriaje>(nivel)),
+            temperatura: 36.8f,
+            frecuenciaCardiaca: 80,
+            frecuenciaRespiratoria: 16,
+            tensionArterial: new TensionArterial { Sistolica = 120, Diastolica = 80 },
+            paciente: pacienteB,
+            enfermero: enfermero
+            );
 
         var repositorioIngreso = _serviceProvider.GetRequiredService<IRepositorioIngreso>();
         await repositorioIngreso.CrearAsync(ingresoB);
@@ -138,26 +153,31 @@ public class RegistrarIngresoStepDefinitions
     [Given(@"el paciente B está en espera con nivel de emergencia ""([^""]*)"" desde hace (\d+) minutos")]
     public async Task DadoElPacienteBEstaEnEsperaConNivelDeEmergenciaDesdeHaceMinutos(string nivel, int minutos)
     {
-        var pacienteB = new Paciente
-        {
-            Dni = 22222222,
-            NombreCompleto = "Carlos López",
-            NumeroDeAfiliado = "AF22222222"
-        };
+        var pacienteB = new Paciente(
+            cuil: "22222222",
+            nombre: "Carlos",
+            apellido: "López",
+            email: "mail3@mail.com",
+            domicilio: new Domicilio("Roca", 2500, "San Miguel de Tucuman"),
+            afiliado: new Afiliado(
+                new ObraSocial("OSDE"), $"AF-5021"
+            )
+        );
 
         var enfermero = _serviceProvider.GetRequiredService<IRepositorioEnfermero>().ObtenerTodosAsync().Result.First();
 
-        var ingresoB = new Ingreso
+        var ingresoB = new Ingreso(
+            nivelEmergencia: NivelEmergencia.CrearNivelEmergencia(Enum.Parse<PrioridadTriaje>(nivel)),
+            temperatura: 36.8f,
+            frecuenciaCardiaca: 80,
+            frecuenciaRespiratoria: 16,
+            tensionArterial: new TensionArterial { Sistolica = 120, Diastolica = 80 },
+            paciente: pacienteB,
+            enfermero: enfermero
+        )
         {
-            Paciente = pacienteB,
-            Enfermero = enfermero,
-            NivelEmergencia = CrearNivelEmergencia(nivel),
-            FechaIngreso = DateTime.Now.AddMinutes(-minutos),
             Informe = "Dolor abdominal",
-            FrecuenciaCardiaca = 80,
-            FrecuenciaRespiratoria = 16,
-            TensionArterial = new TensionArterial { Sistolica = 120, Diastolica = 80 },
-            Estado = EstadoIngreso.PENDIENTE
+            FechaIngreso = DateTime.Now.AddMinutes(-minutos)
         };
 
         var repositorioIngreso = _serviceProvider.GetRequiredService<IRepositorioIngreso>();
@@ -169,16 +189,12 @@ public class RegistrarIngresoStepDefinitions
     [When(@"la enfermera registra un ingreso para el paciente con:")]
     public async Task CuandoLaEnfermeraRegistraUnIngresoParaElPacienteCon(Table table)
     {
-        _pacienteActual ??= new Paciente
-        {
-            Dni = _dniPacienteActual,
-            NombreCompleto = _nombrePaciente
-        };
+        _pacienteActual ??= new Paciente(_cuilPacienteActual, _nombrePaciente);
 
         var request = new RegistroIngresoRequest
         {
-            DniPaciente = _dniPacienteActual,
-            NombrePaciente = _pacienteActual.NombreCompleto,
+            CuilPaciente = _cuilPacienteActual,
+            NombrePaciente = _pacienteActual.Nombre,
             MatriculaEnfermero = "ENF001"
         };
 
@@ -213,12 +229,12 @@ public class RegistrarIngresoStepDefinitions
         _ultimoResultado = await _ingresoService!.RegistrarIngresoAsync(request);
     }
 
-    [When(@"la enfermera intenta registrar un ingreso para el paciente con DNI ""([^""]*)""")]
-    public async Task CuandoLaEnfermeraIntentaRegistrarUnIngresoParaElPacienteConDNI(string dni)
+    [When(@"la enfermera intenta registrar un ingreso para el paciente con CUIL ""([^""]*)""")]
+    public async Task CuandoLaEnfermeraIntentaRegistrarUnIngresoParaElPacienteConCUIL(string cuil)
     {
         var request = new RegistroIngresoRequest
         {
-            DniPaciente = ulong.Parse(dni),
+            CuilPaciente = cuil,
             MatriculaEnfermero = "ENF001",
             Informe = "Test",
             NivelEmergencia = PrioridadTriaje.Urgencia,
@@ -236,7 +252,7 @@ public class RegistrarIngresoStepDefinitions
     {
         var request = new RegistroIngresoRequest
         {
-            DniPaciente = _dniPacienteActual,
+            CuilPaciente = _cuilPacienteActual,
             MatriculaEnfermero = "ENF001",
             Informe = "",
             NivelEmergencia = PrioridadTriaje.Urgencia,
@@ -254,8 +270,8 @@ public class RegistrarIngresoStepDefinitions
     {
         var request = new RegistroIngresoRequest
         {
-            DniPaciente = _dniPacienteActual,
-            NombrePaciente = _pacienteActual!.NombreCompleto,
+            CuilPaciente = _cuilPacienteActual,
+            NombrePaciente = _pacienteActual!.Nombre,
             MatriculaEnfermero = "ENF001",
             Informe = "Test",
             NivelEmergencia = PrioridadTriaje.Urgencia,
@@ -273,8 +289,8 @@ public class RegistrarIngresoStepDefinitions
     {
         var request = new RegistroIngresoRequest
         {
-            DniPaciente = _dniPacienteActual,
-            NombrePaciente = _pacienteActual!.NombreCompleto,
+            CuilPaciente = _cuilPacienteActual,
+            NombrePaciente = _pacienteActual!.Nombre,
             MatriculaEnfermero = "ENF001",
             Informe = "Test",
             NivelEmergencia = PrioridadTriaje.Urgencia,
@@ -292,7 +308,7 @@ public class RegistrarIngresoStepDefinitions
     {
         var request = new RegistroIngresoRequest
         {
-            DniPaciente = 11111111,
+            CuilPaciente = "11111111",
             NombrePaciente = _nombrePaciente,
             MatriculaEnfermero = "ENF001",
             Informe = "Dolor de pecho",
@@ -329,11 +345,7 @@ public class RegistrarIngresoStepDefinitions
     [Then(@"se debe crear el paciente antes de proceder al registro del ingreso")]
     public void EntoncesSeDebeCrearElPacienteAntesDeProcederAlRegistroDelIngreso()
     {
-        _pacienteActual = new Paciente
-        {
-            Dni = _ultimoResultado!.Ingreso!.Paciente.Dni,
-            NombreCompleto = _ultimoResultado!.Ingreso.Paciente.NombreCompleto,
-        };
+        _pacienteActual = new Paciente(_ultimoResultado!.Ingreso!.Paciente.Cuil, _ultimoResultado.Ingreso.Paciente.Nombre);
         Assert.True(_ultimoResultado!.EsExitoso);
     }
 
@@ -362,8 +374,8 @@ public class RegistrarIngresoStepDefinitions
     public async Task EntoncesElPacienteADebeSerAtendidoAntesQueElPacienteB()
     {
         var cola = await _ingresoService!.ObtenerColaAtencionAsync();
-        var pacienteA = cola.FirstOrDefault(i => i.Paciente.Dni == 11111111);
-        var pacienteB = cola.FirstOrDefault(i => i.Paciente.Dni == 22222222);
+        var pacienteA = cola.FirstOrDefault(i => i.Paciente.Cuil.Equals("11111111"));
+        var pacienteB = cola.FirstOrDefault(i => i.Paciente.Cuil.Equals("22222222"));
 
         Assert.NotNull(pacienteA);
         Assert.NotNull(pacienteB);
@@ -378,8 +390,8 @@ public class RegistrarIngresoStepDefinitions
     public async Task EntoncesElPacienteBDebeSerAtendidoAntesQueElPacienteA()
     {
         var cola = await _ingresoService!.ObtenerColaAtencionAsync();
-        var pacienteA = cola.FirstOrDefault(i => i.Paciente.Dni == 11111111);
-        var pacienteB = cola.FirstOrDefault(i => i.Paciente.Dni == 22222222);
+        var pacienteA = cola.FirstOrDefault(i => i.Paciente.Cuil.Equals("11111111"));
+        var pacienteB = cola.FirstOrDefault(i=> i.Paciente.Cuil.Equals("22222222"));
 
         Assert.NotNull(pacienteA);
         Assert.NotNull(pacienteB);
@@ -388,19 +400,5 @@ public class RegistrarIngresoStepDefinitions
         var indiceB = cola.IndexOf(pacienteB);
 
         Assert.True(indiceB < indiceA);
-    }
-
-    private NivelEmergencia CrearNivelEmergencia(string nivel)
-    {
-        var prioridad = Enum.Parse<PrioridadTriaje>(nivel);
-        return prioridad switch
-        {
-            PrioridadTriaje.Critico => new NivelEmergencia { Prioridad = prioridad, Color = "Rojo", TiempoMaximoMinutos = 5 },
-            PrioridadTriaje.Emergencia => new NivelEmergencia { Prioridad = prioridad, Color = "Naranja", TiempoMaximoMinutos = 30 },
-            PrioridadTriaje.Urgencia => new NivelEmergencia { Prioridad = prioridad, Color = "Amarillo", TiempoMaximoMinutos = 60 },
-            PrioridadTriaje.UrgenciaMenor => new NivelEmergencia { Prioridad = prioridad, Color = "Verde", TiempoMaximoMinutos = 120 },
-            PrioridadTriaje.SinUrgencia => new NivelEmergencia { Prioridad = prioridad, Color = "Azul", TiempoMaximoMinutos = 240 },
-            _ => throw new ArgumentException()
-        };
     }
 }

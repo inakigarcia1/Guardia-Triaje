@@ -26,8 +26,8 @@ namespace Guardia.Bdd.Features
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Registrar Ingreso", ("  Como enfermera\r\n  Quiero poder registrar las admisiones de los pacientes a urge" +
-                "ncias\r\n  Para determinar que pacientes tienen mayor prioridad de atención"), global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Registrar Ingreso", "  Como enfermera\r\n  Quiero poder registrar las admisiones de los pacientes a urge" +
+                "ncias\r\n  Para determinar que pacientes tienen mayor prioridad de atención", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
@@ -148,7 +148,7 @@ this.ScenarioInitialize(scenarioInfo);
 await this.FeatureBackgroundAsync();
 #line hidden
 #line 16
- await testRunner.GivenAsync("que existe un paciente con DNI \"12345678\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+ await testRunner.GivenAsync("que existe un paciente con CUIL \"12345678\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 17
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
@@ -212,7 +212,7 @@ this.ScenarioInitialize(scenarioInfo);
 await this.FeatureBackgroundAsync();
 #line hidden
 #line 31
- await testRunner.GivenAsync("que no existe un paciente con DNI \"87654321\" y nombre \"Santino Hamada\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+ await testRunner.GivenAsync("que no existe un paciente con CUIL \"87654321\" y nombre \"Santino Hamada\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 32
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
@@ -279,7 +279,7 @@ this.ScenarioInitialize(scenarioInfo);
 await this.FeatureBackgroundAsync();
 #line hidden
 #line 47
- await testRunner.GivenAsync("que existe un paciente con DNI \"12345678\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+ await testRunner.GivenAsync("que existe un paciente con CUIL \"12345678\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 48
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
@@ -316,7 +316,7 @@ this.ScenarioInitialize(scenarioInfo);
 await this.FeatureBackgroundAsync();
 #line hidden
 #line 53
- await testRunner.GivenAsync("que existe un paciente con DNI \"12345678\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+ await testRunner.GivenAsync("que existe un paciente con CUIL \"12345678\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 54
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
@@ -325,8 +325,8 @@ await this.FeatureBackgroundAsync();
  await testRunner.WhenAsync("la enfermera intenta registrar un ingreso con frecuencia cardíaca \"-10\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 56
- await testRunner.ThenAsync(("se emite un mensaje de error indicando que la frecuencia cardíaca no puede ser ne" +
-                        "gativa"), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync("se emite un mensaje de error indicando que la frecuencia cardíaca no puede ser ne" +
+                        "gativa", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -354,7 +354,7 @@ this.ScenarioInitialize(scenarioInfo);
 await this.FeatureBackgroundAsync();
 #line hidden
 #line 59
- await testRunner.GivenAsync("que existe un paciente con DNI \"12345678\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+ await testRunner.GivenAsync("que existe un paciente con CUIL \"12345678\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 60
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
@@ -363,8 +363,8 @@ await this.FeatureBackgroundAsync();
  await testRunner.WhenAsync("la enfermera intenta registrar un ingreso con frecuencia respiratoria \"-5\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 62
- await testRunner.ThenAsync(("se emite un mensaje de error indicando que la frecuencia respiratoria no puede se" +
-                        "r negativa"), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync("se emite un mensaje de error indicando que la frecuencia respiratoria no puede se" +
+                        "r negativa", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -392,10 +392,10 @@ this.ScenarioInitialize(scenarioInfo);
 await this.FeatureBackgroundAsync();
 #line hidden
 #line 65
- await testRunner.GivenAsync("que existe un paciente A con DNI \"11111111\" y nombre \"Ana García\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+ await testRunner.GivenAsync("que existe un paciente A con CUIL \"11111111\" y nombre \"Ana García\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 66
- await testRunner.AndAsync("que existe un paciente B con DNI \"22222222\" y nombre \"Carlos López\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("que existe un paciente B con CUIL \"22222222\" y nombre \"Carlos López\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 67
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
@@ -435,17 +435,17 @@ this.ScenarioInitialize(scenarioInfo);
 await this.FeatureBackgroundAsync();
 #line hidden
 #line 73
- await testRunner.GivenAsync("que existe un paciente A con DNI \"11111111\" y nombre \"Ana García\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+ await testRunner.GivenAsync("que existe un paciente A con CUIL \"11111111\" y nombre \"Ana García\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 74
- await testRunner.AndAsync("que existe un paciente B con DNI \"22222222\" y nombre \"Carlos López\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("que existe un paciente B con CUIL \"22222222\" y nombre \"Carlos López\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 75
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 76
- await testRunner.AndAsync(("el paciente B está en espera con nivel de emergencia \"Critico\" desde hace 10 minu" +
-                        "tos"), ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("el paciente B está en espera con nivel de emergencia \"Critico\" desde hace 10 minu" +
+                        "tos", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 77
  await testRunner.WhenAsync("la enfermera registra un ingreso para el paciente A con nivel \"Critico\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");

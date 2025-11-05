@@ -31,7 +31,7 @@ public class IngresoServiceTests
         await CrearPacienteYEnfermero();
         var request = new RegistroIngresoRequest
         {
-            DniPaciente = 12345678,
+            CuilPaciente = "12345678",
             NombrePaciente = _nombrePaciente,
             Informe = "Dolor de pecho intenso",
             NivelEmergencia = PrioridadTriaje.Critico,
@@ -60,7 +60,7 @@ public class IngresoServiceTests
         await CrearEnfermero();
         var request = new RegistroIngresoRequest
         {
-            DniPaciente = 99999999,
+            CuilPaciente = "99999999",
             NombrePaciente = "Santino Hamada",
             Informe = "Dolor de pecho",
             NivelEmergencia = PrioridadTriaje.Critico,
@@ -85,7 +85,7 @@ public class IngresoServiceTests
         await CrearPacienteYEnfermero();
         var request = new RegistroIngresoRequest
         {
-            DniPaciente = 12345678,
+            CuilPaciente = "12345678",
             Informe = "",
             NivelEmergencia = PrioridadTriaje.Critico,
             FrecuenciaCardiaca = 120,
@@ -110,7 +110,7 @@ public class IngresoServiceTests
         await CrearPacienteYEnfermero();
         var request = new RegistroIngresoRequest
         {
-            DniPaciente = 12345678,
+            CuilPaciente = "12345678",
             NombrePaciente = _nombrePaciente,
             Informe = "Dolor de pecho",
             NivelEmergencia = PrioridadTriaje.Critico,
@@ -136,7 +136,7 @@ public class IngresoServiceTests
         await CrearPacienteYEnfermero();
         var request = new RegistroIngresoRequest
         {
-            DniPaciente = 12345678,
+            CuilPaciente = "12345678",
             NombrePaciente = _nombrePaciente,
             Informe = "Dolor de pecho",
             NivelEmergencia = PrioridadTriaje.Critico,
@@ -160,35 +160,32 @@ public class IngresoServiceTests
     {
         // Arrange
         await CrearPacienteYEnfermero();
-        
+
         // Crear ingreso de emergencia
-        var ingresoEmergencia = new Ingreso
-        {
-            Paciente = await _repositorioPaciente.ObtenerPorDniAsync(12345678),
-            Enfermero = await _repositorioEnfermero.ObtenerPorMatriculaAsync("ENF001"),
-            NivelEmergencia = new NivelEmergencia { Prioridad = PrioridadTriaje.Emergencia, Color = "Naranja", TiempoMaximoMinutos = 30 },
-            FechaIngreso = DateTime.Now.AddMinutes(-5),
-            Informe = "Emergencia",
-            FrecuenciaCardiaca = 100,
-            FrecuenciaRespiratoria = 18,
-            TensionArterial = new TensionArterial { Sistolica = 130, Diastolica = 85 },
-            Estado = EstadoIngreso.PENDIENTE
-        };
+
+        var ingresoEmergencia = new Ingreso(
+            nivelEmergencia: NivelEmergencia.CrearNivelEmergencia(PrioridadTriaje.Emergencia),
+            temperatura: 37.5f,
+            frecuenciaCardiaca: 100,
+            frecuenciaRespiratoria: 18,
+            tensionArterial: new TensionArterial { Sistolica = 130, Diastolica = 85 },
+            paciente: (await _repositorioPaciente.ObtenerPorCuilAsync("12345678"))!,
+            enfermero: (await _repositorioEnfermero.ObtenerPorMatriculaAsync("ENF001"))!
+            );
+
         await _repositorioIngreso.CrearAsync(ingresoEmergencia);
 
         // Crear ingreso crítico
-        var ingresoCritico = new Ingreso
-        {
-            Paciente = await _repositorioPaciente.ObtenerPorDniAsync(12345678),
-            Enfermero = await _repositorioEnfermero.ObtenerPorMatriculaAsync("ENF001"),
-            NivelEmergencia = new NivelEmergencia { Prioridad = PrioridadTriaje.Critico, Color = "Rojo", TiempoMaximoMinutos = 5 },
-            FechaIngreso = DateTime.Now,
-            Informe = "Crítico",
-            FrecuenciaCardiaca = 120,
-            FrecuenciaRespiratoria = 20,
-            TensionArterial = new TensionArterial { Sistolica = 140, Diastolica = 90 },
-            Estado = EstadoIngreso.PENDIENTE
-        };
+        var ingresoCritico = new Ingreso(
+            nivelEmergencia: NivelEmergencia.CrearNivelEmergencia(PrioridadTriaje.Critico),
+            temperatura: 39f,
+            frecuenciaCardiaca: 120,
+            frecuenciaRespiratoria: 20,
+            tensionArterial: new TensionArterial { Sistolica = 140, Diastolica = 90 },
+            paciente: (await _repositorioPaciente.ObtenerPorCuilAsync("12345678"))!,
+            enfermero: (await _repositorioEnfermero.ObtenerPorMatriculaAsync("ENF001"))!
+        );
+
         await _repositorioIngreso.CrearAsync(ingresoCritico);
 
         // Act
@@ -202,34 +199,41 @@ public class IngresoServiceTests
 
     private async Task CrearPacienteYEnfermero()
     {
-        var paciente = new Paciente
-        {
-            Dni = 12345678,
-            NombreCompleto = "Juan Pérez",
-            NumeroDeAfiliado = "AF12345678"
-        };
-        _nombrePaciente = paciente.NombreCompleto;
+        var paciente = new Paciente(
+            cuil: "20451954270",
+            nombre: "Pedro",
+            apellido: "Gomez",
+            email: "pedro-gomez@mail.com",
+            domicilio: new Domicilio("9 de julio", 500, "San miguel de tucuman"),
+            afiliado: new Afiliado(
+                new ObraSocial("OSDE")
+                , "123456789")
+            );
+
+        _nombrePaciente = $"{paciente.Nombre} {paciente.Apellido}";
         await _repositorioPaciente.CrearAsync(paciente);
 
-        var enfermero = new Enfermero
-        {
-            Matricula = "ENF001",
-            NombreCompleto = "María González",
-            Dni = 87654321,
-            Cuil = 20876543219
-        };
+        var enfermero = new Enfermero(
+            cuil: "20345678901",
+            nombre: "María",
+            apellido: "González",
+            email: "matia.gonzales@mail.com",
+            matricula: "ENF001"
+            );
+
         await _repositorioEnfermero.CrearAsync(enfermero);
     }
 
     private async Task CrearEnfermero()
     {
-        var enfermero = new Enfermero
-        {
-            Matricula = "ENF001",
-            NombreCompleto = "María González",
-            Dni = 87654321,
-            Cuil = 20876543219
-        };
+        var enfermero = new Enfermero(
+            cuil: "20345678901",
+            nombre: "María",
+            apellido: "González",
+            email: "matia.gonzales@mail.com",
+            matricula: "ENF001"
+        );
+
         await _repositorioEnfermero.CrearAsync(enfermero);
     }
 }
