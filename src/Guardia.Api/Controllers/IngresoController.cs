@@ -1,5 +1,6 @@
 using Guardia.Aplicacion.DTOs;
 using Guardia.Aplicacion.Servicios;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Guardia.Api.Controllers;
@@ -16,6 +17,7 @@ public class IngresoController : ControllerBase
     }
     
     [HttpPost("registrar")]
+    [Authorize(Roles = "Enfermero")]
     public async Task<IActionResult> RegistrarIngreso([FromBody] RegistroIngresoRequest request)
     {
         var resultado = await _ingresoService.RegistrarIngresoAsync(request);
@@ -54,6 +56,7 @@ public class IngresoController : ControllerBase
     }
 
     [HttpGet("cola-atencion")]
+    [Authorize(Roles = "Enfermero, Medico")]
     public async Task<IActionResult> ObtenerColaAtencion()
     {
         var cola = await _ingresoService.ObtenerColaAtencionAsync();
