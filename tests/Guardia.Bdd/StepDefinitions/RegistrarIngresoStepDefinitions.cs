@@ -6,7 +6,6 @@ using Guardia.Dominio.Entidades;
 using Guardia.Dominio.Repositorios;
 using Guardia.Infraestructura.Repositorios;
 using Guardia.Aplicacion.DTOs;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Guardia.Bdd.StepDefinitions;
 

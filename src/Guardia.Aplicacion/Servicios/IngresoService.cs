@@ -1,6 +1,5 @@
 using Guardia.Aplicacion.DTOs;
 using Guardia.Dominio.Entidades;
-using Guardia.Dominio.Entidades.Triajes;
 using Guardia.Dominio.Repositorios;
 
 namespace Guardia.Aplicacion.Servicios;

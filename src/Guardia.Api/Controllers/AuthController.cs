@@ -1,11 +1,8 @@
 ﻿using Guardia.Aplicacion.DTOs;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+using Guardia.Aplicacion.Servicios;
+using FluentValidation;
 
 namespace Guardia.Api.Controllers;
 
@@ -13,40 +10,43 @@ namespace Guardia.Api.Controllers;
 [Route("api/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly IConfiguration _config;
-
-    public AuthController(UserManager<IdentityUser> userManager, IConfiguration config)
+    private readonly IAuthService _authService;
+    public AuthController(IAuthService authService)
     {
-        _userManager = userManager;
-        _config = config;
+        _authService = authService;
     }
 
     [HttpPost("registrar")]
-    public async Task<IActionResult> Registrar([FromBody] RegisterDto model)
+    public async Task<IActionResult> Registrar([FromBody] RegisterDto dto, [FromServices] IValidator<RegisterDto> validator)
     {
-        var user = new IdentityUser { UserName = model.Username, Email = model.Email };
-        var result = await _userManager.CreateAsync(user, model.Password);
+        var resultadoValidacion = await validator.ValidateAsync(dto);
+        if (!resultadoValidacion.IsValid)
+        {
+            return BadRequest(resultadoValidacion.Errors.Select(e => e.ErrorMessage));
+        }
 
-        await _userManager.AddToRoleAsync(user, "Enfermero");
+        var resultado = await _authService.RegistrarAsync(dto, "Enfermero");
 
-        if (result.Succeeded)
-            return Ok(new { Message = $"Usuario {user.UserName} creado con éxito." });
-        
-        return BadRequest(result.Errors);
+        if(resultado.EsExitoso)
+            return Created(string.Empty, resultado);
+
+        return BadRequest(resultado);
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginDto model)
+    public async Task<IActionResult> Login([FromBody] LoginDto dto, [FromServices] IValidator<LoginDto> validator)
     {
-        var user = await _userManager.FindByNameAsync(model.Username);
+        var resultadoValidacion = await validator.ValidateAsync(dto);
+        if (!resultadoValidacion.IsValid)
+        {
+            return BadRequest(resultadoValidacion.Errors.Select(e => e.ErrorMessage));
+        }
+        var resultado = await _authService.LoginAsync(dto);
 
-        if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
-            return Unauthorized(new { Message = "Usuario o contraseña inválidos." });
+        if (resultado.EsExitoso)
+            return Ok(resultado);
 
-
-        var token = await GenerateJwtToken(user);
-        return Ok(new AuthResponse(token, user.UserName!));
+        return Unauthorized(resultado);
     }
 
     [HttpGet("quiensoy")]
@@ -55,31 +55,5 @@ public class AuthController : ControllerBase
     {
         var username = User.Identity?.Name;
         return Ok(new { Message = $"Estás autenticado como: {username}" });
-    }
-    private async Task<string> GenerateJwtToken(IdentityUser user)
-    {
-        var claims = new List<Claim>
-        {
-            new(ClaimTypes.Name, user.UserName!),
-            new(ClaimTypes.NameIdentifier, user.Id),
-            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
-
-        var roles = await _userManager.GetRolesAsync(user);
-        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"] ?? string.Empty));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.Now.AddDays(1);
-
-        var token = new JwtSecurityToken(
-            issuer: _config["Jwt:Issuer"],
-            audience: _config["Jwt:Audience"],
-            claims: claims,
-            expires: expires,
-            signingCredentials: creds
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }
