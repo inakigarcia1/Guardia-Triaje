@@ -19,9 +19,4 @@ public class Medico : Persona
     {
 
     }
-
-    public void ModificarTriaje(Triaje triaje)
-    {
-        
-    }
 }

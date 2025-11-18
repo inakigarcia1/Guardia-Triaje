@@ -42,9 +42,9 @@ public class AuthControllerTests
 
     private static void ConfigureRegister(IAuthService authService)
     {
-        authService.RegistrarAsync(Arg.Any<RegisterDto>(), Arg.Any<string>()).Returns(callInfo =>
+        authService.RegistrarEnfermeroAsync(Arg.Any<RegistroEnfermeroDto>()).Returns(callInfo =>
         {
-            var dto = callInfo.Arg<RegisterDto>();
+            var dto = callInfo.Arg<RegistroEnfermeroDto>();
             var errores = new List<string>();
             if (string.IsNullOrWhiteSpace(dto.Username))
             {
@@ -294,10 +294,10 @@ public class AuthControllerTests
     public async Task Register_UsuarioVacio_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto(string.Empty, "test@example.com", "password123");
+        var registerDto = new RegistroEnfermeroDto(string.Empty, "test@example.com", "password123");
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -309,10 +309,10 @@ public class AuthControllerTests
     public async Task Register_UsuarioNull_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto(null!, "test@example.com", "password123");
+        var registerDto = new RegistroEnfermeroDto(null!, "test@example.com", "password123");
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -324,10 +324,10 @@ public class AuthControllerTests
     public async Task Register_UsuarioWhitespace_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto("   ", "test@example.com", "password123");
+        var registerDto = new RegistroEnfermeroDto("   ", "test@example.com", "password123");
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -339,10 +339,10 @@ public class AuthControllerTests
     public async Task Register_EmailVacio_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto("usuario", string.Empty, "password123");
+        var registerDto = new RegistroEnfermeroDto("usuario", string.Empty, "password123");
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -354,10 +354,10 @@ public class AuthControllerTests
     public async Task Register_EmailNull_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto("usuario", null!, "password123");
+        var registerDto = new RegistroEnfermeroDto("usuario", null!, "password123");
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -369,10 +369,10 @@ public class AuthControllerTests
     public async Task Register_EmailInvalido_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto("usuario", "email-invalido", "password123");
+        var registerDto = new RegistroEnfermeroDto("usuario", "email-invalido", "password123");
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -384,10 +384,10 @@ public class AuthControllerTests
     public async Task Register_EmailSinArroba_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto("usuario", "emailinvalido.com", "password123");
+        var registerDto = new RegistroEnfermeroDto("usuario", "emailinvalido.com", "password123");
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -399,10 +399,10 @@ public class AuthControllerTests
     public async Task Register_EmailSinDominio_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto("usuario", "email@", "password123");
+        var registerDto = new RegistroEnfermeroDto("usuario", "email@", "password123");
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -414,10 +414,10 @@ public class AuthControllerTests
     public async Task Register_PasswordVacia_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto("usuario", "test@example.com", string.Empty);
+        var registerDto = new RegistroEnfermeroDto("usuario", "test@example.com", string.Empty);
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -429,10 +429,10 @@ public class AuthControllerTests
     public async Task Register_PasswordNull_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto("usuario", "test@example.com", null!);
+        var registerDto = new RegistroEnfermeroDto("usuario", "test@example.com", null!);
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -444,10 +444,10 @@ public class AuthControllerTests
     public async Task Register_PasswordWhitespace_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto("usuario", "test@example.com", "   ");
+        var registerDto = new RegistroEnfermeroDto("usuario", "test@example.com", "   ");
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -459,10 +459,10 @@ public class AuthControllerTests
     public async Task Register_PasswordMenorA8Caracteres_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto("usuario", "test@example.com", "short");
+        var registerDto = new RegistroEnfermeroDto("usuario", "test@example.com", "short");
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -474,10 +474,10 @@ public class AuthControllerTests
     public async Task Register_PasswordExactamente7Caracteres_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto("usuario", "test@example.com", "1234567");
+        var registerDto = new RegistroEnfermeroDto("usuario", "test@example.com", "1234567");
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -489,10 +489,10 @@ public class AuthControllerTests
     public async Task Register_TodosLosCamposVacios_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto(string.Empty, string.Empty, string.Empty);
+        var registerDto = new RegistroEnfermeroDto(string.Empty, string.Empty, string.Empty);
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -506,10 +506,10 @@ public class AuthControllerTests
     public async Task Register_UsuarioYEmailInvalidos_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto(string.Empty, "email-invalido", "password123");
+        var registerDto = new RegistroEnfermeroDto(string.Empty, "email-invalido", "password123");
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -522,10 +522,10 @@ public class AuthControllerTests
     public async Task Register_EmailYPasswordInvalidos_DebeDevolverBadRequest()
     {
         // Arrange
-        var registerDto = new RegisterDto("usuario", "email-invalido", "short");
+        var registerDto = new RegistroEnfermeroDto("usuario", "email-invalido", "short");
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as BadRequestObjectResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as BadRequestObjectResult;
         var errores = resultado!.Value as IEnumerable<string>;
 
         // Assert
@@ -538,11 +538,11 @@ public class AuthControllerTests
     public async Task Register_DatosValidos_DebeDevolverCreated()
     {
         // Arrange
-        var registerDto = new RegisterDto("usuarioValido", "test@example.com", "password123");
+        var registerDto = new RegistroEnfermeroDto("usuarioValido", "test@example.com", "password123");
         var resultadoExitoso = new RegisterResponse(true, "Exito", []);
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as CreatedResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as CreatedResult;
         var resultadoValue = (resultado!.Value as RegisterResponse)!;
 
         // Assert
@@ -554,11 +554,11 @@ public class AuthControllerTests
     public async Task Register_PasswordExactamente8Caracteres_DebeDevolverCreated()
     {
         // Arrange
-        var registerDto = new RegisterDto("usuarioValido", "test@example.com", "12345678");
+        var registerDto = new RegistroEnfermeroDto("usuarioValido", "test@example.com", "12345678");
         var resultadoExitoso = new RegisterResponse(true, "Exito", []);
 
         // Act
-        var resultado = await _authController.Registrar(registerDto, new RegisterValidation()) as CreatedResult;
+        var resultado = await _authController.RegistrarEnfermero(registerDto, new RegistroEnfermeroValidator()) as CreatedResult;
         var resultadoValue = (resultado!.Value as RegisterResponse)!;
 
         // Assert

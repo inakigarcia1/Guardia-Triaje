@@ -11,7 +11,8 @@ public static class InyeccionAplicacion
     {
         services.AddScoped<IngresoService>();
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IValidator<RegisterDto>, RegisterValidation>();
+        services.AddScoped<IValidator<RegistroEnfermeroDto>, RegistroEnfermeroValidator>();
+        services.AddScoped<IValidator<RegistroMedicoDto>, RegistroMedicoValidator>();
         services.AddScoped<IValidator<LoginDto>, LoginValidation>();
         return services;
     }

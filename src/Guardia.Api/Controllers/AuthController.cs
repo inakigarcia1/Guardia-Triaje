@@ -16,8 +16,8 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
-    [HttpPost("registrar")]
-    public async Task<IActionResult> Registrar([FromBody] RegisterDto dto, [FromServices] IValidator<RegisterDto> validator)
+    [HttpPost("registrar-enfermero")]
+    public async Task<IActionResult> RegistrarEnfermero([FromBody] RegistroEnfermeroDto dto, [FromServices] IValidator<RegistroEnfermeroDto> validator)
     {
         var resultadoValidacion = await validator.ValidateAsync(dto);
         if (!resultadoValidacion.IsValid)
@@ -25,9 +25,26 @@ public class AuthController : ControllerBase
             return BadRequest(resultadoValidacion.Errors.Select(e => e.ErrorMessage));
         }
 
-        var resultado = await _authService.RegistrarAsync(dto, "Enfermero");
+        var resultado = await _authService.RegistrarEnfermeroAsync(dto);
 
         if(resultado.EsExitoso)
+            return Created(string.Empty, resultado);
+
+        return BadRequest(resultado);
+    }
+
+    [HttpPost("registrar-medico")]
+    public async Task<IActionResult> RegistrarMedico([FromBody] RegistroMedicoDto dto, [FromServices] IValidator<RegistroMedicoDto> validator)
+    {
+        var resultadoValidacion = await validator.ValidateAsync(dto);
+        if (!resultadoValidacion.IsValid)
+        {
+            return BadRequest(resultadoValidacion.Errors.Select(e => e.ErrorMessage));
+        }
+
+        var resultado = await _authService.RegistrarMedicoAsync(dto);
+
+        if (resultado.EsExitoso)
             return Created(string.Empty, resultado);
 
         return BadRequest(resultado);
@@ -54,6 +71,6 @@ public class AuthController : ControllerBase
     public IActionResult QuienSoy()
     {
         var username = User.Identity?.Name;
-        return Ok(new { Message = $"Estás autenticado como: {username}" });
+        return Ok(new { Message = $"Estás autenticado como: {username}"});
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Guardia.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/ingreso")]
 public class IngresoController : ControllerBase
 {
     private readonly IngresoService _ingresoService;

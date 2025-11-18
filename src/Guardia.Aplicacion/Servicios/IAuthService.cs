@@ -5,5 +5,6 @@ namespace Guardia.Aplicacion.Servicios;
 public interface IAuthService
 {
     Task<AuthResponse> LoginAsync(LoginDto loginDto);
-    Task<RegisterResponse> RegistrarAsync(RegisterDto registerDto, string rol);
+    Task<RegisterResponse> RegistrarEnfermeroAsync(RegistroEnfermeroDto registroEnfermeroDto);
+    Task<RegisterResponse> RegistrarMedicoAsync(RegistroMedicoDto registroEnfermeroDto);
 }

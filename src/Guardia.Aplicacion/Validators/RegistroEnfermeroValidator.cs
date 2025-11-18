@@ -2,9 +2,9 @@
 using Guardia.Aplicacion.DTOs;
 
 namespace Guardia.Aplicacion.Validators;
-public class RegisterValidation : AbstractValidator<RegisterDto>
+public class RegistroEnfermeroValidator : AbstractValidator<RegistroEnfermeroDto>
 {
-    public RegisterValidation()
+    public RegistroEnfermeroValidator()
     {
         RuleFor(x => x.Username)
             .NotEmpty().WithMessage("El nombre de usuario es obligatorio.");
