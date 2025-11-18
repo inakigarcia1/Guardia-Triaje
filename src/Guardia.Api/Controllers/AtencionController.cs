@@ -21,7 +21,7 @@ public class AtencionController : ControllerBase
         return Ok(atenciones);
     }
 
-    [HttpPost("reclamar-siguiente")]
+    [HttpGet("reclamar-siguiente")]
     [Authorize(Roles = "Medico")]
     public async Task<IActionResult> ReclamarSiguiente()
     {
