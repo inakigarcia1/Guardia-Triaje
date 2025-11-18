@@ -10,6 +10,8 @@ public static class InyeccionInfraestructura
         services.AddSingleton<IRepositorioPaciente, RepositorioPacienteEnMemoria>();
         services.AddSingleton<IRepositorioIngreso, RepositorioIngresoEnMemoria>();
         services.AddSingleton<IRepositorioEnfermero, RepositorioEnfermeroEnMemoria>();
+        services.AddSingleton<IRepositorioMedico, RepositorioMedicoEnMemoria>();
+        services.AddSingleton<IRepositorioAtencion, RepositorioAtencionEnMemoria>();
         return services;
     }
 }

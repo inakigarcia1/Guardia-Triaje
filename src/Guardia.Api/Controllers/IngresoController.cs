@@ -1,21 +1,23 @@
 using Guardia.Aplicacion.DTOs;
 using Guardia.Aplicacion.Servicios;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Guardia.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/ingreso")]
 public class IngresoController : ControllerBase
 {
-    private readonly IngresoService _ingresoService;
+    private readonly IIngresoService _ingresoService;
 
-    public IngresoController(IngresoService ingresoService)
+    public IngresoController(IIngresoService ingresoService)
     {
         _ingresoService = ingresoService;
     }
     
     [HttpPost("registrar")]
+    [Authorize(Roles = "Enfermero")]
     public async Task<IActionResult> RegistrarIngreso([FromBody] RegistroIngresoRequest request)
     {
         var resultado = await _ingresoService.RegistrarIngresoAsync(request);
@@ -34,8 +36,8 @@ public class IngresoController : ControllerBase
                 fechaIngreso = resultado.Ingreso.FechaIngreso,
                 paciente = new
                 {
-                    dni = resultado.Ingreso.Paciente.Dni,
-                    nombre = resultado.Ingreso.Paciente.NombreCompleto
+                    cuil = resultado.Ingreso.Paciente.Cuil,
+                    nombre = resultado.Ingreso.Paciente.Nombre
                 },
                 nivelEmergencia = new
                 {
@@ -47,13 +49,14 @@ public class IngresoController : ControllerBase
                 enfermero = new
                 {
                     matricula = resultado.Ingreso.Enfermero.Matricula,
-                    nombre = resultado.Ingreso.Enfermero.NombreCompleto
+                    nombre = resultado.Ingreso.Enfermero.Nombre
                 }
             }
         });
     }
 
     [HttpGet("cola-atencion")]
+    [Authorize(Roles = "Enfermero, Medico")]
     public async Task<IActionResult> ObtenerColaAtencion()
     {
         var cola = await _ingresoService.ObtenerColaAtencionAsync();
@@ -64,8 +67,8 @@ public class IngresoController : ControllerBase
             fechaIngreso = i.FechaIngreso,
             paciente = new
             {
-                dni = i.Paciente.Dni,
-                nombre = i.Paciente.NombreCompleto
+                cuil = i.Paciente.Cuil,
+                nombre = i.Paciente.Nombre
             },
             nivelEmergencia = new
             {
