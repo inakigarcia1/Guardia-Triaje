@@ -1,6 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Guardia.Aplicacion.DTOs;
+using Guardia.Dominio.Entidades.Personal;
+using Guardia.Dominio.Repositorios;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -12,15 +15,21 @@ public class AuthService : IAuthService
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IConfiguration _config;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IRepositorioEnfermero _repositorioEnfermero;
+    private readonly IRepositorioMedico _repositorioMedico;
 
     public AuthService(
         UserManager<IdentityUser> userManager,
         IConfiguration config,
-        RoleManager<IdentityRole> roleManager)
+        RoleManager<IdentityRole> roleManager,
+        IRepositorioEnfermero repositorioEnfermero,
+        IRepositorioMedico repositorioMedico)
     {
         _userManager = userManager;
         _config = config;
         _roleManager = roleManager;
+        _repositorioEnfermero = repositorioEnfermero;
+        _repositorioMedico = repositorioMedico;
     }
 
     public async Task<AuthResponse> LoginAsync(LoginDto loginDto)
@@ -44,10 +53,10 @@ public class AuthService : IAuthService
             Errores: []);
     }
 
-    public async Task<RegisterResponse> RegistrarEnfermeroAsync(RegistroEnfermeroDto registroEnfermeroDto)
+    public async Task<RegisterResponse> RegistrarAsync(RegistroUsuarioDto registroUsuarioDto, string rol)
     {
-        var user = new IdentityUser { UserName = registroEnfermeroDto.Username, Email = registroEnfermeroDto.Email };
-        var result = await _userManager.CreateAsync(user, registroEnfermeroDto.Password);
+        var user = new IdentityUser { UserName = registroUsuarioDto.Username, Email = registroUsuarioDto.Email };
+        var result = await _userManager.CreateAsync(user, registroUsuarioDto.Password);
 
         var errores = result.Errors.Select(e => e.Description).ToList();
 
@@ -58,36 +67,25 @@ public class AuthService : IAuthService
                 Errores: errores
             );
 
-        await _userManager.AddToRoleAsync(user, "Enfermero");
-
+        await _userManager.AddToRoleAsync(user, rol);
+        var claim = new Claim("Matricula", registroUsuarioDto.Matricula);
+        await _userManager.AddClaimAsync(user, claim);
+        
+        if (rol == "Enfermero")
+        {
+            var enfermero = new Enfermero(registroUsuarioDto.Cuil, registroUsuarioDto.Username, registroUsuarioDto.Matricula);
+            await _repositorioEnfermero.CrearAsync(enfermero);
+        }
+        else if (rol == "Medico")
+        {
+            var medico = new Medico(registroUsuarioDto.Cuil, registroUsuarioDto.Username, registroUsuarioDto.Matricula);
+            await _repositorioMedico.CrearAsync(medico);
+        }
+        
         return new RegisterResponse(
                 EsExitoso: true,
-                Mensaje: $"Usuario '{user.UserName}' con rol 'Enfermero' creado con éxito.",
+                Mensaje: $"Usuario '{user.UserName}' con rol '{rol}' creado con éxito.",
                 Errores: errores
-        );
-    }
-
-    public async Task<RegisterResponse> RegistrarMedicoAsync(RegistroMedicoDto registroEnfermeroDto)
-    {
-        var user = new IdentityUser { UserName = registroEnfermeroDto.Username, Email = registroEnfermeroDto.Email };
-        var result = await _userManager.CreateAsync(user, registroEnfermeroDto.Password);
-
-        var errores = result.Errors.Select(e => e.Description).ToList();
-
-        if (!result.Succeeded)
-            return new RegisterResponse(
-                EsExitoso: false,
-                Mensaje: "No se pudo crear el usuario.",
-                Errores: errores
-            );
-
-        await _userManager.AddToRoleAsync(user, "Medico");
-        var claim = new Claim("Matricula", registroEnfermeroDto.Matricula);
-        await _userManager.AddClaimAsync(user, claim);
-        return new RegisterResponse(
-            EsExitoso: true,
-            Mensaje: $"Usuario '{user.UserName}' con rol 'Medico' creado con éxito.",
-            Errores: errores
         );
     }
 

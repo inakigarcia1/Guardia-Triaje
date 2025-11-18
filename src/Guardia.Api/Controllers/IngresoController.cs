@@ -9,9 +9,9 @@ namespace Guardia.Api.Controllers;
 [Route("api/ingreso")]
 public class IngresoController : ControllerBase
 {
-    private readonly IngresoService _ingresoService;
+    private readonly IIngresoService _ingresoService;
 
-    public IngresoController(IngresoService ingresoService)
+    public IngresoController(IIngresoService ingresoService)
     {
         _ingresoService = ingresoService;
     }

@@ -4,7 +4,7 @@ using Guardia.Dominio.Repositorios;
 
 namespace Guardia.Aplicacion.Servicios;
 
-public class IngresoService
+public class IngresoService : IIngresoService
 {
     private readonly IRepositorioIngreso _repositorioIngreso;
     private readonly IRepositorioPaciente _repositorioPaciente;

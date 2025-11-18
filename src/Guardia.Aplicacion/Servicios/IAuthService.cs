@@ -3,12 +3,10 @@
 public interface IAuthService
 {
     Task<AuthResponse> LoginAsync(LoginDto loginDto);
-    Task<RegisterResponse> RegistrarEnfermeroAsync(RegistroEnfermeroDto registroEnfermeroDto);
-    Task<RegisterResponse> RegistrarMedicoAsync(RegistroMedicoDto registroEnfermeroDto);
+    Task<RegisterResponse> RegistrarAsync(RegistroUsuarioDto registroUsuarioDto, string rol);
 }
 public record LoginDto(string Username, string Password);
-public record RegistroEnfermeroDto(string Username, string Email, string Password);
-public record RegistroMedicoDto(string Username, string Email, string Password, string Matricula);
+public record RegistroUsuarioDto(string Username, string Email, string Password, string Matricula, string Cuil);
 public record AuthResponse(
     bool EsExitoso,
     string Token,

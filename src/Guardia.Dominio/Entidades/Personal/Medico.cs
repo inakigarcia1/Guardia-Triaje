@@ -15,6 +15,6 @@ public class Medico : Persona
 
     public void RegistrarAtencion(Atencion atencion)
     {
-
+        Atenciones.Add(atencion);
     }
 }

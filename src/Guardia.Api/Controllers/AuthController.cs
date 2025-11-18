@@ -15,35 +15,23 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
-    [HttpPost("registrar-enfermero")]
-    public async Task<IActionResult> RegistrarEnfermero([FromBody] RegistroEnfermeroDto dto, [FromServices] IValidator<RegistroEnfermeroDto> validator)
+    [HttpPost("registrar")]
+    public async Task<IActionResult> Registrar([FromBody] RegistroUsuarioDto dto, [FromQuery] string rol, [FromServices] IValidator<RegistroUsuarioDto> validator)
     {
+        if (rol != "Enfermero" && rol != "Medico")
+        {
+            return BadRequest(new { error = "El rol debe ser 'Enfermero' o 'Medico'" });
+        }
+
         var resultadoValidacion = await validator.ValidateAsync(dto);
         if (!resultadoValidacion.IsValid)
         {
             return BadRequest(resultadoValidacion.Errors.Select(e => e.ErrorMessage));
         }
 
-        var resultado = await _authService.RegistrarEnfermeroAsync(dto);
+        var resultado = await _authService.RegistrarAsync(dto, rol);
 
         if(resultado.EsExitoso)
-            return Created(string.Empty, resultado);
-
-        return BadRequest(resultado);
-    }
-
-    [HttpPost("registrar-medico")]
-    public async Task<IActionResult> RegistrarMedico([FromBody] RegistroMedicoDto dto, [FromServices] IValidator<RegistroMedicoDto> validator)
-    {
-        var resultadoValidacion = await validator.ValidateAsync(dto);
-        if (!resultadoValidacion.IsValid)
-        {
-            return BadRequest(resultadoValidacion.Errors.Select(e => e.ErrorMessage));
-        }
-
-        var resultado = await _authService.RegistrarMedicoAsync(dto);
-
-        if (resultado.EsExitoso)
             return Created(string.Empty, resultado);
 
         return BadRequest(resultado);

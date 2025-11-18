@@ -10,7 +10,7 @@ namespace Guardia.Tests;
 
 public class IngresoServiceTests
 {
-    private readonly IngresoService _ingresoService;
+    private readonly IIngresoService _ingresoService;
     private readonly IRepositorioPaciente _repositorioPaciente;
     private readonly IRepositorioIngreso _repositorioIngreso;
     private readonly IRepositorioEnfermero _repositorioEnfermero;

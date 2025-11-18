@@ -8,4 +8,5 @@ public interface IRepositorioIngreso
     Task<List<Ingreso>> ObtenerPendientesAsync();
     Task<List<Ingreso>> ObtenerTodosAsync();
     Task<Ingreso?> ObtenerPorIdAsync(Guid id);
+    Task ActualizarAsync(Ingreso ingreso);
 }

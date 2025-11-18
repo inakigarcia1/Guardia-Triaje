@@ -34,4 +34,9 @@ public class RepositorioIngresoEnMemoria : IRepositorioIngreso
         var ingreso = _ingresos.FirstOrDefault(i => i.Id == id);
         return Task.FromResult(ingreso);
     }
+
+    public Task ActualizarAsync(Ingreso ingreso)
+    {
+        return Task.CompletedTask;
+    }
 }

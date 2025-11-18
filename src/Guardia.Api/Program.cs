@@ -19,6 +19,8 @@ public class Program
         builder.Services
             .AgregarInfraestructura()
             .AgregarAplicacion();
+        
+        builder.Services.AddHttpContextAccessor();
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
         {
@@ -68,7 +70,7 @@ public class Program
                 Scheme = "Bearer",
                 BearerFormat = "JWT",
                 In = ParameterLocation.Header,
-                Description = "Ingresa tu token Bearer JWT aquí."
+                Description = "Ingresa tu token Bearer JWT aquï¿½."
             });
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
