@@ -1,5 +1,4 @@
-﻿using Guardia.Aplicacion.DTOs;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Guardia.Aplicacion.Servicios;
 using FluentValidation;

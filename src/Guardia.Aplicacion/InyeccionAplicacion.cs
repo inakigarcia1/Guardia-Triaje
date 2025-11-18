@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Guardia.Aplicacion.DTOs;
 using Guardia.Aplicacion.Servicios;
 using Guardia.Aplicacion.Validators;
 using Microsoft.Extensions.DependencyInjection;

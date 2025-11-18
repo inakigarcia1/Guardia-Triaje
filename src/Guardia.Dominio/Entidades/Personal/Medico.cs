@@ -1,6 +1,4 @@
-﻿using Guardia.Dominio.Entidades.Triajes;
-
-namespace Guardia.Dominio.Entidades.Personal;
+﻿namespace Guardia.Dominio.Entidades.Personal;
 public class Medico : Persona
 {
     public string Matricula { get; set; }

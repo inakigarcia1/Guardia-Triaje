@@ -71,6 +71,7 @@ public class IngresoService
 
             // Guardar ingreso
             await _repositorioIngreso.CrearAsync(ingreso);
+            enfermero.RegistrarIngreso(ingreso);
 
             return new ResultadoIngreso
             {

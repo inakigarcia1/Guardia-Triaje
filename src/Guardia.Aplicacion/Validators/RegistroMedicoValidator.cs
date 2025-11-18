@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Guardia.Aplicacion.DTOs;
+using Guardia.Aplicacion.Servicios;
 
 namespace Guardia.Aplicacion.Validators;
 public class RegistroMedicoValidator : AbstractValidator<RegistroMedicoDto>

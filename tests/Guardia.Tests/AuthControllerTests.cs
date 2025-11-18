@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FluentAssertions;
 using Guardia.Api.Controllers;
-using Guardia.Aplicacion.DTOs;
 using Guardia.Aplicacion.Servicios;
 using Guardia.Aplicacion.Validators;
 using Microsoft.AspNetCore.Mvc;
