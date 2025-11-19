@@ -11,7 +11,8 @@ public record AuthResponse(
     bool EsExitoso,
     string Token,
     string Username,
-    List<string> Errores
+    List<string> Errores,
+    string? Rol = null
 );
 
 public record RegisterResponse(bool EsExitoso, string Mensaje, List<string> Errores);

@@ -44,13 +44,15 @@ public class AuthService : IAuthService
                 Username: user?.UserName ?? string.Empty,
                 Errores: ["Usuario o contraseña no válidos."]);
         }
-
-        var token = await GenerateJwtToken(user);
+        var token = await GenerateJwtTokenAsync(user);
+        var roles = await _userManager.GetRolesAsync(user);
         return new AuthResponse(
             EsExitoso: true,
             Token: token,
             Username: user.UserName ?? string.Empty,
-            Errores: []);
+            Errores: [],
+            Rol: roles.FirstOrDefault()
+            );
     }
 
     public async Task<RegisterResponse> RegistrarAsync(RegistroUsuarioDto registroUsuarioDto, string rol)
@@ -68,18 +70,24 @@ public class AuthService : IAuthService
             );
 
         await _userManager.AddToRoleAsync(user, rol);
-        var claim = new Claim("Matricula", registroUsuarioDto.Matricula);
-        await _userManager.AddClaimAsync(user, claim);
-        
-        if (rol == "Enfermero")
+
+        var claimMatricula = new Claim("Matricula", registroUsuarioDto.Matricula);
+        await _userManager.AddClaimAsync(user, claimMatricula);
+
+        switch (rol)
         {
-            var enfermero = new Enfermero(registroUsuarioDto.Cuil, registroUsuarioDto.Username, registroUsuarioDto.Matricula);
-            await _repositorioEnfermero.CrearAsync(enfermero);
-        }
-        else if (rol == "Medico")
-        {
-            var medico = new Medico(registroUsuarioDto.Cuil, registroUsuarioDto.Username, registroUsuarioDto.Matricula);
-            await _repositorioMedico.CrearAsync(medico);
+            case "Enfermero":
+                {
+                    var enfermero = new Enfermero(registroUsuarioDto.Cuil, registroUsuarioDto.Username, registroUsuarioDto.Matricula);
+                    await _repositorioEnfermero.CrearAsync(enfermero);
+                    break;
+                }
+            case "Medico":
+                {
+                    var medico = new Medico(registroUsuarioDto.Cuil, registroUsuarioDto.Username, registroUsuarioDto.Matricula);
+                    await _repositorioMedico.CrearAsync(medico);
+                    break;
+                }
         }
         
         return new RegisterResponse(
@@ -89,7 +97,7 @@ public class AuthService : IAuthService
         );
     }
 
-    private async Task<string> GenerateJwtToken(IdentityUser user)
+    private async Task<string> GenerateJwtTokenAsync(IdentityUser user)
     {
         var claims = new List<Claim>
         {
@@ -100,6 +108,7 @@ public class AuthService : IAuthService
 
         var roles = await _userManager.GetRolesAsync(user);
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
         var userClaims = await _userManager.GetClaimsAsync(user);
         claims.AddRange(userClaims);
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"] ?? string.Empty));
