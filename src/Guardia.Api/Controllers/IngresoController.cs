@@ -20,8 +20,13 @@ public class IngresoController : ControllerBase
     [Authorize(Roles = "Enfermero")]
     public async Task<IActionResult> RegistrarIngreso([FromBody] RegistroIngresoRequest request)
     {
+        var matricula = User.Claims.FirstOrDefault(c => c.Type == "Matricula")?.Value;
+        if(matricula is null)
+        {
+            return BadRequest(new { error = "Se debe enviar la matricula del enfermero" });
+        }
+        request.MatriculaEnfermero = matricula;
         var resultado = await _ingresoService.RegistrarIngresoAsync(request);
-        
         if (!resultado.EsExitoso)
         {
             return BadRequest(new { error = resultado.MensajeError });

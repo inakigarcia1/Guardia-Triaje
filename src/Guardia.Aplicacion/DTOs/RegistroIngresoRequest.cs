@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Guardia.Dominio.Entidades.Triajes;
 
 namespace Guardia.Aplicacion.DTOs;
@@ -13,5 +14,6 @@ public class RegistroIngresoRequest
     public float FrecuenciaRespiratoria { get; set; }
     public float TensionSistolica { get; set; }
     public float TensionDiastolica { get; set; }
+    [JsonIgnore]
     public string MatriculaEnfermero { get; set; } = string.Empty;
 }
