@@ -46,7 +46,8 @@ public class IngresoServiceTests
             FrecuenciaRespiratoria = 20,
             TensionSistolica = 140,
             TensionDiastolica = 90,
-            MatriculaEnfermero = "ENF001"
+            MatriculaEnfermero = "ENF001",
+            Temperatura = 36
         };
 
         // Act
@@ -80,7 +81,8 @@ public class IngresoServiceTests
             FrecuenciaRespiratoria = 20,
             TensionSistolica = 140,
             TensionDiastolica = 90,
-            MatriculaEnfermero = "ENF001"
+            MatriculaEnfermero = "ENF001",
+            Temperatura = 37
         };
 
         // Act

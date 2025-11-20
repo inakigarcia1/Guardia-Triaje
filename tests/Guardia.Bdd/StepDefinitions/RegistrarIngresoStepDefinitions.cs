@@ -22,14 +22,16 @@ public class RegistrarIngresoStepDefinitions
     private string _cuilPacienteActual;
     private string _nombrePaciente;
     private string _cuilPacienteInexistente;
+    private string _cuilPacienteB;
+    private string _cuilPacienteA;
 
     public RegistrarIngresoStepDefinitions()
     {
         var services = new ServiceCollection();
-        services.AddScoped<IRepositorioPaciente, RepositorioPacienteEnMemoria>();
-        services.AddScoped<IRepositorioIngreso, RepositorioIngresoEnMemoria>();
-        services.AddScoped<IRepositorioEnfermero, RepositorioEnfermeroEnMemoria>();
-        services.AddScoped<IngresoService>();
+        services.AddSingleton<IRepositorioPaciente, RepositorioPacienteEnMemoria>();
+        services.AddSingleton<IRepositorioIngreso, RepositorioIngresoEnMemoria>();
+        services.AddSingleton<IRepositorioEnfermero, RepositorioEnfermeroEnMemoria>();
+        services.AddSingleton<IngresoService>();
 
         _serviceProvider = services.BuildServiceProvider();
         _ingresoService = _serviceProvider.GetRequiredService<IngresoService>();
@@ -82,6 +84,7 @@ public class RegistrarIngresoStepDefinitions
             )
         );
         _nombrePaciente = nombre;
+        _cuilPacienteA = cuil;
         var repositorioPaciente = _serviceProvider.GetRequiredService<IRepositorioPaciente>();
         await repositorioPaciente.CrearAsync(pacienteA);
     }
@@ -99,8 +102,8 @@ public class RegistrarIngresoStepDefinitions
                 new ObraSocial("OSDE"), $"AF{cuil}"
             )
         );
-
         var repositorioPaciente = _serviceProvider.GetRequiredService<IRepositorioPaciente>();
+        _cuilPacienteB = cuil;
         await repositorioPaciente.CrearAsync(pacienteB);
     }
 
@@ -154,18 +157,8 @@ public class RegistrarIngresoStepDefinitions
     [Given(@"el paciente B está en espera con nivel de emergencia ""([^""]*)"" desde hace (\d+) minutos")]
     public async Task DadoElPacienteBEstaEnEsperaConNivelDeEmergenciaDesdeHaceMinutos(string nivel, int minutos)
     {
-        var pacienteB = new Paciente(
-            cuil: "20123456789",
-            nombre: "Carlos",
-            apellido: "López",
-            email: "mail3@mail.com",
-            domicilio: new Domicilio("Roca", 2500, "San Miguel de Tucuman"),
-            afiliado: new Afiliado(
-                new ObraSocial("OSDE"), $"AF-5021"
-            )
-        );
-
-        var enfermero = _serviceProvider.GetRequiredService<IRepositorioEnfermero>().ObtenerTodosAsync().Result.First();
+        var enfermeros = await _serviceProvider.GetRequiredService<IRepositorioEnfermero>().ObtenerTodosAsync();
+        var pacienteB = await _serviceProvider.GetRequiredService<IRepositorioPaciente>().ObtenerPorCuilAsync(_cuilPacienteB);
 
         var ingresoB = new Ingreso(
             nivelEmergencia: NivelEmergencia.CrearNivelEmergencia(Enum.Parse<PrioridadTriaje>(nivel)),
@@ -173,8 +166,8 @@ public class RegistrarIngresoStepDefinitions
             frecuenciaCardiaca: 80,
             frecuenciaRespiratoria: 16,
             tensionArterial: new TensionArterial { Sistolica = 120, Diastolica = 80 },
-            paciente: pacienteB,
-            enfermero: enfermero
+            paciente: pacienteB!,
+            enfermero: enfermeros.First()
         )
         {
             Informe = "Dolor abdominal",
@@ -228,6 +221,9 @@ public class RegistrarIngresoStepDefinitions
                     break;
                 case "Tensión Diastólica":
                     request.TensionDiastolica = float.Parse(valor);
+                    break;
+                case "Temperatura":
+                    request.Temperatura = float.Parse(valor);
                     break;
             }
         }
@@ -340,24 +336,29 @@ public class RegistrarIngresoStepDefinitions
     [When(@"la enfermera registra un ingreso para el paciente A con nivel ""([^""]*)""")]
     public async Task CuandoLaEnfermeraRegistraUnIngresoParaElPacienteAConNivel(string nivel)
     {
+        var pacienteRepo = _serviceProvider.GetRequiredService<IRepositorioPaciente>();
+        var pacienteA = await pacienteRepo.ObtenerPorCuilAsync(_cuilPacienteA);
+        if(pacienteA is null)
+            throw new Exception("El paciente A no existe en el repositorio.");
         var request = new RegistroIngresoRequest
         {
-            CuilPaciente = "22451954275",
-            NombrePaciente = _nombrePaciente,
-            ApellidoPaciente = "Gallardo",
-            EmailPaciente = "mail2@mail.com",
-            CalleDomicilio = "Espana",
-            NumeroDomicilio = 250,
-            LocalidadDomicilio = "San Miguel de Tucuman",
-            NombreObraSocial = "OSDE",
-            NumeroAfiliado = "AF22451954275",
+            CuilPaciente = pacienteA.Cuil,
+            NombrePaciente = pacienteA.Nombre,
+            ApellidoPaciente = pacienteA.Apellido,
+            EmailPaciente = pacienteA.Email,
+            CalleDomicilio = pacienteA.Domicilio.Calle,
+            NumeroDomicilio = pacienteA.Domicilio.Numero,
+            LocalidadDomicilio = pacienteA.Domicilio.Localidad,
+            NombreObraSocial = pacienteA.Afiliado?.ObraSocial.Nombre,
+            NumeroAfiliado = pacienteA.Afiliado?.NumeroAfiliado,
             MatriculaEnfermero = "ENF001",
             Informe = "Dolor de pecho",
             NivelEmergencia = Enum.Parse<PrioridadTriaje>(nivel),
             FrecuenciaCardiaca = 120,
             FrecuenciaRespiratoria = 20,
             TensionSistolica = 140,
-            TensionDiastolica = 90
+            TensionDiastolica = 90,
+            Temperatura = 37
         };
 
         _ultimoResultado = await _ingresoService!.RegistrarIngresoAsync(request);

@@ -174,16 +174,19 @@ await this.FeatureBackgroundAsync();
                 table2.AddRow(new string[] {
                             "Tensión Diastólica",
                             "90"});
+                table2.AddRow(new string[] {
+                            "Temperatura",
+                            "38"});
 #line 18
  await testRunner.WhenAsync("la enfermera registra un ingreso para el paciente con:", ((string)(null)), table2, "When ");
 #line hidden
-#line 26
+#line 27
  await testRunner.ThenAsync("el ingreso se registra correctamente", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 27
+#line 28
  await testRunner.AndAsync("el paciente queda en estado PENDIENTE", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 28
+#line 29
  await testRunner.AndAsync("el ingreso se agrega a la cola de atención", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -198,7 +201,7 @@ await this.FeatureBackgroundAsync();
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Ingresar paciente inexistente con datos válidos", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 30
+#line 31
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -211,10 +214,10 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 31
+#line 32
  await testRunner.GivenAsync("que no existe un paciente con CUIL \"22123456780\" y nombre \"Santino Hamada\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 32
+#line 33
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
                 global::Reqnroll.Table table3 = new global::Reqnroll.Table(new string[] {
@@ -222,35 +225,38 @@ await this.FeatureBackgroundAsync();
                             "Valor"});
                 table3.AddRow(new string[] {
                             "Informe",
-                            "Dolor de pecho intenso"});
+                            "Dolor de cabeza"});
                 table3.AddRow(new string[] {
                             "Nivel de Emergencia",
-                            "Critico"});
+                            "Emergencia"});
                 table3.AddRow(new string[] {
                             "Frecuencia Cardiaca",
-                            "120"});
+                            "100"});
                 table3.AddRow(new string[] {
                             "Frecuencia Respiratoria",
-                            "20"});
+                            "18"});
                 table3.AddRow(new string[] {
                             "Tensión Sistólica",
-                            "140"});
+                            "120"});
                 table3.AddRow(new string[] {
                             "Tensión Diastólica",
-                            "90"});
-#line 33
+                            "80"});
+                table3.AddRow(new string[] {
+                            "Temperatura",
+                            "37"});
+#line 34
  await testRunner.WhenAsync("la enfermera registra un ingreso para el paciente con:", ((string)(null)), table3, "When ");
 #line hidden
-#line 41
+#line 43
  await testRunner.ThenAsync("se debe crear el paciente antes de proceder al registro del ingreso", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 42
+#line 44
  await testRunner.AndAsync("el ingreso se registra correctamente", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 43
+#line 45
  await testRunner.AndAsync("el paciente queda en estado PENDIENTE", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 44
+#line 46
  await testRunner.AndAsync("el ingreso se agrega a la cola de atención", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -265,7 +271,7 @@ await this.FeatureBackgroundAsync();
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Ingresar paciente con datos mandatorios faltantes", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 46
+#line 48
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -278,16 +284,16 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 47
+#line 49
  await testRunner.GivenAsync("que existe un paciente con CUIL \"20123456789\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 48
+#line 50
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 49
+#line 51
  await testRunner.WhenAsync("la enfermera intenta registrar un ingreso para el paciente omitiendo el informe", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 50
+#line 52
  await testRunner.ThenAsync("se emite un mensaje de error indicando que el informe es obligatorio", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -302,7 +308,7 @@ await this.FeatureBackgroundAsync();
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Ingresar paciente con frecuencia cardíaca negativa", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 52
+#line 54
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -315,16 +321,16 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 53
+#line 55
  await testRunner.GivenAsync("que existe un paciente con CUIL \"20123456789\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 54
+#line 56
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 55
+#line 57
  await testRunner.WhenAsync("la enfermera intenta registrar un ingreso con frecuencia cardíaca \"-10\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 56
+#line 58
  await testRunner.ThenAsync("se emite un mensaje de error indicando que la frecuencia cardíaca no puede ser ne" +
                         "gativa", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
@@ -340,7 +346,7 @@ await this.FeatureBackgroundAsync();
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Ingresar paciente con frecuencia respiratoria negativa", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 58
+#line 60
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -353,16 +359,16 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 59
+#line 61
  await testRunner.GivenAsync("que existe un paciente con CUIL \"20123456789\" y nombre \"Juan Pérez\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 60
+#line 62
  await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 61
+#line 63
  await testRunner.WhenAsync("la enfermera intenta registrar un ingreso con frecuencia respiratoria \"-5\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 62
+#line 64
  await testRunner.ThenAsync("se emite un mensaje de error indicando que la frecuencia respiratoria no puede se" +
                         "r negativa", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
@@ -378,7 +384,7 @@ await this.FeatureBackgroundAsync();
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Verificar prioridad de atención - paciente crítico vs emergencia", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 64
+#line 66
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -391,22 +397,22 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 65
- await testRunner.GivenAsync("que existe un paciente A con CUIL \"20451954270\" y nombre \"Ana García\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 66
- await testRunner.AndAsync("que existe un paciente B con CUIL \"22451954275\" y nombre \"Carlos López\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
 #line 67
- await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.GivenAsync("que existe un paciente A con CUIL \"22451954275\" y nombre \"Ana García\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 68
- await testRunner.AndAsync("el paciente B está en espera con nivel de emergencia \"Emergencia\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("que existe un paciente B con CUIL \"22451954275\" y nombre \"Carlos López\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 69
- await testRunner.WhenAsync("la enfermera registra un ingreso para el paciente A con nivel \"Critico\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 70
+ await testRunner.AndAsync("el paciente B está en espera con nivel de emergencia \"Emergencia\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 71
+ await testRunner.WhenAsync("la enfermera registra un ingreso para el paciente A con nivel \"Critico\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 72
  await testRunner.ThenAsync("el paciente A debe ser atendido antes que el paciente B", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -421,7 +427,7 @@ await this.FeatureBackgroundAsync();
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Verificar prioridad de atención - mismo nivel, orden por fecha", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 72
+#line 74
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -434,23 +440,23 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 73
- await testRunner.GivenAsync("que existe un paciente A con CUIL \"20451954270\" y nombre \"Ana García\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 74
- await testRunner.AndAsync("que existe un paciente B con CUIL \"22451954275\" y nombre \"Carlos López\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
 #line 75
- await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.GivenAsync("que existe un paciente A con CUIL \"22451954275\" y nombre \"Ana García\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 76
+ await testRunner.AndAsync("que existe un paciente B con CUIL \"20123456789\" y nombre \"Carlos López\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 77
+ await testRunner.AndAsync("que existe una enfermera con matrícula \"ENF001\" y nombre \"María González\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 78
  await testRunner.AndAsync("el paciente B está en espera con nivel de emergencia \"Critico\" desde hace 10 minu" +
                         "tos", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 77
+#line 79
  await testRunner.WhenAsync("la enfermera registra un ingreso para el paciente A con nivel \"Critico\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 78
+#line 80
  await testRunner.ThenAsync("el paciente B debe ser atendido antes que el paciente A", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
