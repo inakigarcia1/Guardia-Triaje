@@ -1,4 +1,4 @@
-﻿using Guardia.Dominio.Entidades;
+﻿using System.Text.Json.Serialization;
 
 namespace Guardia.Aplicacion.Servicios;
 public interface IAtencionService
@@ -11,8 +11,6 @@ public interface IAtencionService
 public record RegistroAtencionDto
 {
     public Guid IngresoId { get; set; }
-    public DateTime Inicio { get; set; }
-    public DateTime Fin { get; set; }
     public string DiagnosticoPresuntivo { get; set; } = string.Empty;
     public string ProcedimientoRealizado { get; set; } = string.Empty;
     public string Observaciones { get; set; } = string.Empty;
@@ -38,8 +36,7 @@ public record IngresoSiguienteDto
 
 public record AtencionDto
 {
-    public DateTime Inicio { get; set; }
-    public DateTime Fin { get; set; }
+    public DateTime CreadoEn { get; set; }
     public string DiagnosticoPresuntivo { get; set; } = string.Empty;
     public string ProcedimientoRealizado { get; set; } = string.Empty;
     public string Observaciones { get; set; } = string.Empty;

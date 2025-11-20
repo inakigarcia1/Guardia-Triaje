@@ -6,8 +6,11 @@ public class RegistroUsuarioValidator : AbstractValidator<RegistroUsuarioDto>
 {
     public RegistroUsuarioValidator()
     {
-        RuleFor(x => x.Username)
-            .NotEmpty().WithMessage("El nombre de usuario es obligatorio.");
+        RuleFor(x => x.Nombre)
+            .NotEmpty().WithMessage("El nombre es obligatorio.");
+
+        RuleFor(x => x.Apellido)
+            .NotEmpty().WithMessage("El apellido es obligatorio.");
 
         RuleFor(x => x.Email)
             .NotEmpty().WithMessage("El correo electrónico es obligatorio.")

@@ -31,8 +31,15 @@ public class IngresoServiceTests
         await CrearPacienteYEnfermero();
         var request = new RegistroIngresoRequest
         {
-            CuilPaciente = "20123456789",
-            NombrePaciente = _nombrePaciente,
+            CuilPaciente = "20451954270",
+            NombrePaciente = "Pedro",
+            ApellidoPaciente = "Gomez",
+            EmailPaciente = "pedro-gomez@mail.com",
+            CalleDomicilio = "9 de julio",
+            NumeroDomicilio = 500,
+            LocalidadDomicilio = "San miguel de tucuman",
+            NombreObraSocial = "OSDE",
+            NumeroAfiliado = "123456789",
             Informe = "Dolor de pecho intenso",
             NivelEmergencia = PrioridadTriaje.Critico,
             FrecuenciaCardiaca = 120,
@@ -61,7 +68,12 @@ public class IngresoServiceTests
         var request = new RegistroIngresoRequest
         {
             CuilPaciente = "20123456785",
-            NombrePaciente = "Santino Hamada",
+            NombrePaciente = "Santino",
+            ApellidoPaciente = "Hamada",
+            EmailPaciente = "santino.hamada@mail.com",
+            CalleDomicilio = "San Martin",
+            NumeroDomicilio = 123,
+            LocalidadDomicilio = "San Miguel de Tucuman",
             Informe = "Dolor de pecho",
             NivelEmergencia = PrioridadTriaje.Critico,
             FrecuenciaCardiaca = 120,
@@ -85,7 +97,15 @@ public class IngresoServiceTests
         await CrearPacienteYEnfermero();
         var request = new RegistroIngresoRequest
         {
-            CuilPaciente = "12345678",
+            CuilPaciente = "20451954270",
+            NombrePaciente = "Pedro",
+            ApellidoPaciente = "Gomez",
+            EmailPaciente = "pedro-gomez@mail.com",
+            CalleDomicilio = "9 de julio",
+            NumeroDomicilio = 500,
+            LocalidadDomicilio = "San miguel de tucuman",
+            NombreObraSocial = "OSDE",
+            NumeroAfiliado = "123456789",
             Informe = "",
             NivelEmergencia = PrioridadTriaje.Critico,
             FrecuenciaCardiaca = 120,
@@ -110,8 +130,15 @@ public class IngresoServiceTests
         await CrearPacienteYEnfermero();
         var request = new RegistroIngresoRequest
         {
-            CuilPaciente = "12345678",
-            NombrePaciente = _nombrePaciente,
+            CuilPaciente = "20451954270",
+            NombrePaciente = "Pedro",
+            ApellidoPaciente = "Gomez",
+            EmailPaciente = "pedro-gomez@mail.com",
+            CalleDomicilio = "9 de julio",
+            NumeroDomicilio = 500,
+            LocalidadDomicilio = "San miguel de tucuman",
+            NombreObraSocial = "OSDE",
+            NumeroAfiliado = "123456789",
             Informe = "Dolor de pecho",
             NivelEmergencia = PrioridadTriaje.Critico,
             FrecuenciaCardiaca = -10,
@@ -136,8 +163,15 @@ public class IngresoServiceTests
         await CrearPacienteYEnfermero();
         var request = new RegistroIngresoRequest
         {
-            CuilPaciente = "12345678",
-            NombrePaciente = _nombrePaciente,
+            CuilPaciente = "20451954270",
+            NombrePaciente = "Pedro",
+            ApellidoPaciente = "Gomez",
+            EmailPaciente = "pedro-gomez@mail.com",
+            CalleDomicilio = "9 de julio",
+            NumeroDomicilio = 500,
+            LocalidadDomicilio = "San miguel de tucuman",
+            NombreObraSocial = "OSDE",
+            NumeroAfiliado = "123456789",
             Informe = "Dolor de pecho",
             NivelEmergencia = PrioridadTriaje.Critico,
             FrecuenciaCardiaca = 120,
@@ -169,7 +203,7 @@ public class IngresoServiceTests
             frecuenciaCardiaca: 100,
             frecuenciaRespiratoria: 18,
             tensionArterial: new TensionArterial { Sistolica = 130, Diastolica = 85 },
-            paciente: (await _repositorioPaciente.ObtenerPorCuilAsync("12345678"))!,
+            paciente: (await _repositorioPaciente.ObtenerPorCuilAsync("20451954270"))!,
             enfermero: (await _repositorioEnfermero.ObtenerPorMatriculaAsync("ENF001"))!
             );
 
@@ -182,7 +216,7 @@ public class IngresoServiceTests
             frecuenciaCardiaca: 120,
             frecuenciaRespiratoria: 20,
             tensionArterial: new TensionArterial { Sistolica = 140, Diastolica = 90 },
-            paciente: (await _repositorioPaciente.ObtenerPorCuilAsync("12345678"))!,
+            paciente: (await _repositorioPaciente.ObtenerPorCuilAsync("20451954270"))!,
             enfermero: (await _repositorioEnfermero.ObtenerPorMatriculaAsync("ENF001"))!
         );
 

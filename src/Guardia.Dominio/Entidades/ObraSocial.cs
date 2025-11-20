@@ -6,7 +6,6 @@ public class ObraSocial
 {
     private string _nombre;
     public Guid Id { get; set; } = Guid.NewGuid();
-
     public string Nombre
     {
         get => _nombre;

@@ -9,10 +9,6 @@ public class Enfermero : Persona
     {
         Matricula = matricula;
     }
-    public Enfermero(string cuil, string nombre, string matricula) : base(cuil, nombre)
-    {
-        Matricula = matricula;
-    }
 
     public void RegistrarIngreso(Ingreso ingreso)
     {

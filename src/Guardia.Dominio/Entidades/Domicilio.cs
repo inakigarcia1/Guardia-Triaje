@@ -14,7 +14,6 @@ public class Domicilio
         set
         {
             if (string.IsNullOrWhiteSpace(value)) throw new DominioException("La calle no puede estar vacía");
-            if (value.Any(char.IsSymbol) || value.Any(char.IsPunctuation)) throw new DominioException("La calle no puede contener caracteres especiales");
 
             _calle = value;
         }
@@ -36,7 +35,6 @@ public class Domicilio
         set
         {
             if (string.IsNullOrWhiteSpace(value)) throw new DominioException("La localidad no puede estar vacía");
-            if (value.Any(char.IsSymbol) || value.Any(char.IsPunctuation)) throw new DominioException("La localidad no puede contener caracteres especiales");
             _localidad = value;
         }
     }
