@@ -7,17 +7,93 @@ public class Ingreso
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public DateTime FechaIngreso { get; set; } = DateTime.Now;
-    public string Informe { get; set; } = string.Empty;
-    public NivelEmergencia NivelEmergencia { get; set; }
+
+    private string _informe = string.Empty;
+    public string Informe
+    {
+        get => _informe;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("El informe es obligatorio.");
+
+            _informe = value;
+        }
+    }
+
+    private NivelEmergencia _nivelEmergencia;
+    public NivelEmergencia NivelEmergencia
+    {
+        get => _nivelEmergencia;
+        set
+        {
+            if (value is null)
+                throw new ArgumentException("El nivel de emergencia es obligatorio.");
+
+            _nivelEmergencia = value;
+        }
+    }
+
     public EstadoIngreso Estado { get; set; } = EstadoIngreso.PENDIENTE;
-    public float Temperatura { get; set; }
-    public float FrecuenciaCardiaca { get; set; }
-    public float FrecuenciaRespiratoria { get; set; }
-    public TensionArterial TensionArterial { get; set; }
+
+    private float _temperatura;
+    public float Temperatura
+    {
+        get => _temperatura;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentException("La temperatura debe ser mayor que 0.");
+
+            _temperatura = value;
+        }
+    }
+
+    private float _frecuenciaCardiaca;
+    public float FrecuenciaCardiaca
+    {
+        get => _frecuenciaCardiaca;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentException("La frecuencia cardíaca debe ser mayor que 0.");
+
+            _frecuenciaCardiaca = value;
+        }
+    }
+
+    private float _frecuenciaRespiratoria;
+    public float FrecuenciaRespiratoria
+    {
+        get => _frecuenciaRespiratoria;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentException("La frecuencia respiratoria debe ser mayor que 0.");
+
+            _frecuenciaRespiratoria = value;
+        }
+    }
+
+    private TensionArterial _tensionArterial;
+    public TensionArterial TensionArterial
+    {
+        get => _tensionArterial;
+        set => _tensionArterial = value ?? throw new ArgumentException("La tensión arterial es obligatoria.");
+    }
+
     public Paciente Paciente { get; set; }
     public Enfermero Enfermero { get; set; }
     public DateTime FechaCreacion { get; set; } = DateTime.Now;
-    public Ingreso(NivelEmergencia nivelEmergencia, float temperatura, float frecuenciaCardiaca, float frecuenciaRespiratoria, TensionArterial tensionArterial, Paciente paciente, Enfermero enfermero)
+
+    public Ingreso(
+        NivelEmergencia nivelEmergencia,
+        float temperatura,
+        float frecuenciaCardiaca,
+        float frecuenciaRespiratoria,
+        TensionArterial tensionArterial,
+        Paciente paciente,
+        Enfermero enfermero)
     {
         NivelEmergencia = nivelEmergencia;
         Temperatura = temperatura;
@@ -50,9 +126,32 @@ public class NivelEmergencia
 
 public class TensionArterial
 {
-    public float Sistolica { get; set; }
-    public float Diastolica { get; set; }
-    
+    private float _sistolica;
+    public float Sistolica
+    {
+        get => _sistolica;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentException("La tensión sistólica debe ser mayor que 0.");
+
+            _sistolica = value;
+        }
+    }
+
+    private float _diastolica;
+    public float Diastolica
+    {
+        get => _diastolica;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentException("La tensión diastólica debe ser mayor que 0.");
+
+            _diastolica = value;
+        }
+    }
+
     public override string ToString()
     {
         return $"{Sistolica}/{Diastolica}";

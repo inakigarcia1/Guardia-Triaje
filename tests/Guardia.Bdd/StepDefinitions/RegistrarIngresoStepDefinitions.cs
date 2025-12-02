@@ -22,14 +22,16 @@ public class RegistrarIngresoStepDefinitions
     private string _cuilPacienteActual;
     private string _nombrePaciente;
     private string _cuilPacienteInexistente;
+    private string _cuilPacienteB;
+    private string _cuilPacienteA;
 
     public RegistrarIngresoStepDefinitions()
     {
         var services = new ServiceCollection();
-        services.AddScoped<IRepositorioPaciente, RepositorioPacienteEnMemoria>();
-        services.AddScoped<IRepositorioIngreso, RepositorioIngresoEnMemoria>();
-        services.AddScoped<IRepositorioEnfermero, RepositorioEnfermeroEnMemoria>();
-        services.AddScoped<IngresoService>();
+        services.AddSingleton<IRepositorioPaciente, RepositorioPacienteEnMemoria>();
+        services.AddSingleton<IRepositorioIngreso, RepositorioIngresoEnMemoria>();
+        services.AddSingleton<IRepositorioEnfermero, RepositorioEnfermeroEnMemoria>();
+        services.AddSingleton<IngresoService>();
 
         _serviceProvider = services.BuildServiceProvider();
         _ingresoService = _serviceProvider.GetRequiredService<IngresoService>();
@@ -48,7 +50,7 @@ public class RegistrarIngresoStepDefinitions
         _pacienteActual = new Paciente(
             cuil,
             nombre,
-            apellido: "PÈrez",
+            apellido: "P√©rez",
             email: "mail@mail.com",
             domicilio: new Domicilio("Italia", 500, "San Miguel de Tucuman"),
             afiliado: new Afiliado(
@@ -76,12 +78,13 @@ public class RegistrarIngresoStepDefinitions
             nombre,
             apellido: "Gallardo",
             email: "mail2@mail.com",
-            domicilio: new Domicilio("EspaÒa", 250, "San Miguel de Tucuman"),
+            domicilio: new Domicilio("Espa√±a", 250, "San Miguel de Tucuman"),
             afiliado: new Afiliado(
                 new ObraSocial("OSDE"), $"AF{cuil}"
             )
         );
         _nombrePaciente = nombre;
+        _cuilPacienteA = cuil;
         var repositorioPaciente = _serviceProvider.GetRequiredService<IRepositorioPaciente>();
         await repositorioPaciente.CrearAsync(pacienteA);
     }
@@ -92,25 +95,25 @@ public class RegistrarIngresoStepDefinitions
         var pacienteB = new Paciente(
             cuil,
             nombre,
-            apellido: "VÈliz",
+            apellido: "V√©liz",
             email: "mail3@mail.com",
             domicilio: new Domicilio("Roca", 2500, "San Miguel de Tucuman"),
             afiliado: new Afiliado(
                 new ObraSocial("OSDE"), $"AF{cuil}"
             )
         );
-
         var repositorioPaciente = _serviceProvider.GetRequiredService<IRepositorioPaciente>();
+        _cuilPacienteB = cuil;
         await repositorioPaciente.CrearAsync(pacienteB);
     }
 
-    [Given(@"que existe una enfermera con matrÌcula ""([^""]*)"" y nombre ""([^""]*)""")]
+    [Given(@"que existe una enfermera con matr√≠cula ""([^""]*)"" y nombre ""([^""]*)""")]
     public async Task DadoQueExisteUnaEnfermeraConMatriculaYNombre(string matricula, string nombre)
     {
         _enfermeroActual = new Enfermero(
             cuil: "20123456789",
             nombre: nombre,
-            apellido: "Gonz·lez",
+            apellido: "Gonz√°lez",
             email: "matia.gonzales@mail.com",
             matricula: matricula
         );
@@ -119,13 +122,13 @@ public class RegistrarIngresoStepDefinitions
         await repositorioEnfermero.CrearAsync(_enfermeroActual);
     }
 
-    [Given(@"el paciente B est· en espera con nivel de emergencia ""([^""]*)""")]
+    [Given(@"el paciente B est√° en espera con nivel de emergencia ""([^""]*)""")]
     public async Task DadoElPacienteBEstaEnEsperaConNivelDeEmergencia(string nivel)
     {
         var pacienteB = new Paciente(
             cuil: "20123456789",
             nombre: "Carlos",
-            apellido: "LÛpez",
+            apellido: "L√≥pez",
             email: "mail3@mail.com",
             domicilio: new Domicilio("Roca", 2500, "San Miguel de Tucuman"),
             afiliado: new Afiliado(
@@ -151,21 +154,11 @@ public class RegistrarIngresoStepDefinitions
         _colaAtencion.Add(ingresoB);
     }
 
-    [Given(@"el paciente B est· en espera con nivel de emergencia ""([^""]*)"" desde hace (\d+) minutos")]
+    [Given(@"el paciente B est√° en espera con nivel de emergencia ""([^""]*)"" desde hace (\d+) minutos")]
     public async Task DadoElPacienteBEstaEnEsperaConNivelDeEmergenciaDesdeHaceMinutos(string nivel, int minutos)
     {
-        var pacienteB = new Paciente(
-            cuil: "20123456789",
-            nombre: "Carlos",
-            apellido: "LÛpez",
-            email: "mail3@mail.com",
-            domicilio: new Domicilio("Roca", 2500, "San Miguel de Tucuman"),
-            afiliado: new Afiliado(
-                new ObraSocial("OSDE"), $"AF-5021"
-            )
-        );
-
-        var enfermero = _serviceProvider.GetRequiredService<IRepositorioEnfermero>().ObtenerTodosAsync().Result.First();
+        var enfermeros = await _serviceProvider.GetRequiredService<IRepositorioEnfermero>().ObtenerTodosAsync();
+        var pacienteB = await _serviceProvider.GetRequiredService<IRepositorioPaciente>().ObtenerPorCuilAsync(_cuilPacienteB);
 
         var ingresoB = new Ingreso(
             nivelEmergencia: NivelEmergencia.CrearNivelEmergencia(Enum.Parse<PrioridadTriaje>(nivel)),
@@ -173,8 +166,8 @@ public class RegistrarIngresoStepDefinitions
             frecuenciaCardiaca: 80,
             frecuenciaRespiratoria: 16,
             tensionArterial: new TensionArterial { Sistolica = 120, Diastolica = 80 },
-            paciente: pacienteB,
-            enfermero: enfermero
+            paciente: pacienteB!,
+            enfermero: enfermeros.First()
         )
         {
             Informe = "Dolor abdominal",
@@ -190,12 +183,17 @@ public class RegistrarIngresoStepDefinitions
     [When(@"la enfermera registra un ingreso para el paciente con:")]
     public async Task CuandoLaEnfermeraRegistraUnIngresoParaElPacienteCon(Table table)
     {
-        _pacienteActual ??= new Paciente(_cuilPacienteActual ?? _cuilPacienteInexistente, _nombrePaciente);
-
         var request = new RegistroIngresoRequest
         {
             CuilPaciente = _cuilPacienteActual ?? _cuilPacienteInexistente,
-            NombrePaciente = _pacienteActual.Nombre,
+            NombrePaciente = _pacienteActual?.Nombre ?? _nombrePaciente,
+            ApellidoPaciente = _pacienteActual?.Apellido ?? "Apellido",
+            EmailPaciente = _pacienteActual?.Email ?? "email@mail.com",
+            CalleDomicilio = _pacienteActual?.Domicilio?.Calle ?? "Calle",
+            NumeroDomicilio = _pacienteActual?.Domicilio?.Numero ?? 123,
+            LocalidadDomicilio = _pacienteActual?.Domicilio?.Localidad ?? "Localidad",
+            NombreObraSocial = _pacienteActual?.Afiliado?.ObraSocial?.Nombre,
+            NumeroAfiliado = _pacienteActual?.Afiliado?.NumeroAfiliado,
             MatriculaEnfermero = "ENF001"
         };
 
@@ -218,11 +216,14 @@ public class RegistrarIngresoStepDefinitions
                 case "Frecuencia Respiratoria":
                     request.FrecuenciaRespiratoria = float.Parse(valor);
                     break;
-                case "TensiÛn SistÛlica":
+                case "Tensi√≥n Sist√≥lica":
                     request.TensionSistolica = float.Parse(valor);
                     break;
-                case "TensiÛn DiastÛlica":
+                case "Tensi√≥n Diast√≥lica":
                     request.TensionDiastolica = float.Parse(valor);
+                    break;
+                case "Temperatura":
+                    request.Temperatura = float.Parse(valor);
                     break;
             }
         }
@@ -236,6 +237,12 @@ public class RegistrarIngresoStepDefinitions
         var request = new RegistroIngresoRequest
         {
             CuilPaciente = cuil,
+            NombrePaciente = "Nombre",
+            ApellidoPaciente = "Apellido",
+            EmailPaciente = "email@mail.com",
+            CalleDomicilio = "Calle",
+            NumeroDomicilio = 123,
+            LocalidadDomicilio = "Localidad",
             MatriculaEnfermero = "ENF001",
             Informe = "Test",
             NivelEmergencia = PrioridadTriaje.Urgencia,
@@ -254,6 +261,14 @@ public class RegistrarIngresoStepDefinitions
         var request = new RegistroIngresoRequest
         {
             CuilPaciente = _cuilPacienteActual,
+            NombrePaciente = _pacienteActual!.Nombre,
+            ApellidoPaciente = _pacienteActual.Apellido,
+            EmailPaciente = _pacienteActual.Email,
+            CalleDomicilio = _pacienteActual.Domicilio!.Calle,
+            NumeroDomicilio = _pacienteActual.Domicilio.Numero,
+            LocalidadDomicilio = _pacienteActual.Domicilio.Localidad,
+            NombreObraSocial = _pacienteActual.Afiliado?.ObraSocial?.Nombre,
+            NumeroAfiliado = _pacienteActual.Afiliado?.NumeroAfiliado,
             MatriculaEnfermero = "ENF001",
             Informe = "",
             NivelEmergencia = PrioridadTriaje.Urgencia,
@@ -266,13 +281,20 @@ public class RegistrarIngresoStepDefinitions
         _ultimoResultado = await _ingresoService!.RegistrarIngresoAsync(request);
     }
 
-    [When(@"la enfermera intenta registrar un ingreso con frecuencia cardÌaca ""([^""]*)""")]
+    [When(@"la enfermera intenta registrar un ingreso con frecuencia card√≠aca ""([^""]*)""")]
     public async Task CuandoLaEnfermeraIntentaRegistrarUnIngresoConFrecuenciaCardiaca(string frecuencia)
     {
         var request = new RegistroIngresoRequest
         {
             CuilPaciente = _cuilPacienteActual,
             NombrePaciente = _pacienteActual!.Nombre,
+            ApellidoPaciente = _pacienteActual.Apellido,
+            EmailPaciente = _pacienteActual.Email,
+            CalleDomicilio = _pacienteActual.Domicilio!.Calle,
+            NumeroDomicilio = _pacienteActual.Domicilio.Numero,
+            LocalidadDomicilio = _pacienteActual.Domicilio.Localidad,
+            NombreObraSocial = _pacienteActual.Afiliado?.ObraSocial?.Nombre,
+            NumeroAfiliado = _pacienteActual.Afiliado?.NumeroAfiliado,
             MatriculaEnfermero = "ENF001",
             Informe = "Test",
             NivelEmergencia = PrioridadTriaje.Urgencia,
@@ -292,6 +314,13 @@ public class RegistrarIngresoStepDefinitions
         {
             CuilPaciente = _cuilPacienteActual,
             NombrePaciente = _pacienteActual!.Nombre,
+            ApellidoPaciente = _pacienteActual.Apellido,
+            EmailPaciente = _pacienteActual.Email,
+            CalleDomicilio = _pacienteActual.Domicilio!.Calle,
+            NumeroDomicilio = _pacienteActual.Domicilio.Numero,
+            LocalidadDomicilio = _pacienteActual.Domicilio.Localidad,
+            NombreObraSocial = _pacienteActual.Afiliado?.ObraSocial?.Nombre,
+            NumeroAfiliado = _pacienteActual.Afiliado?.NumeroAfiliado,
             MatriculaEnfermero = "ENF001",
             Informe = "Test",
             NivelEmergencia = PrioridadTriaje.Urgencia,
@@ -307,17 +336,29 @@ public class RegistrarIngresoStepDefinitions
     [When(@"la enfermera registra un ingreso para el paciente A con nivel ""([^""]*)""")]
     public async Task CuandoLaEnfermeraRegistraUnIngresoParaElPacienteAConNivel(string nivel)
     {
+        var pacienteRepo = _serviceProvider.GetRequiredService<IRepositorioPaciente>();
+        var pacienteA = await pacienteRepo.ObtenerPorCuilAsync(_cuilPacienteA);
+        if(pacienteA is null)
+            throw new Exception("El paciente A no existe en el repositorio.");
         var request = new RegistroIngresoRequest
         {
-            CuilPaciente = "22451954275",
-            NombrePaciente = _nombrePaciente,
+            CuilPaciente = pacienteA.Cuil,
+            NombrePaciente = pacienteA.Nombre,
+            ApellidoPaciente = pacienteA.Apellido,
+            EmailPaciente = pacienteA.Email,
+            CalleDomicilio = pacienteA.Domicilio.Calle,
+            NumeroDomicilio = pacienteA.Domicilio.Numero,
+            LocalidadDomicilio = pacienteA.Domicilio.Localidad,
+            NombreObraSocial = pacienteA.Afiliado?.ObraSocial.Nombre,
+            NumeroAfiliado = pacienteA.Afiliado?.NumeroAfiliado,
             MatriculaEnfermero = "ENF001",
             Informe = "Dolor de pecho",
             NivelEmergencia = Enum.Parse<PrioridadTriaje>(nivel),
             FrecuenciaCardiaca = 120,
             FrecuenciaRespiratoria = 20,
             TensionSistolica = 140,
-            TensionDiastolica = 90
+            TensionDiastolica = 90,
+            Temperatura = 37
         };
 
         _ultimoResultado = await _ingresoService!.RegistrarIngresoAsync(request);
@@ -336,7 +377,7 @@ public class RegistrarIngresoStepDefinitions
         Assert.Equal(EstadoIngreso.PENDIENTE, _ultimoResultado!.Ingreso!.Estado);
     }
 
-    [Then(@"el ingreso se agrega a la cola de atenciÛn")]
+    [Then(@"el ingreso se agrega a la cola de atenci√≥n")]
     public async Task EntoncesElIngresoSeAgregaALaColaDeAtencion()
     {
         var cola = await _ingresoService!.ObtenerColaAtencionAsync();
@@ -346,8 +387,9 @@ public class RegistrarIngresoStepDefinitions
     [Then(@"se debe crear el paciente antes de proceder al registro del ingreso")]
     public void EntoncesSeDebeCrearElPacienteAntesDeProcederAlRegistroDelIngreso()
     {
-        _pacienteActual = new Paciente(_ultimoResultado!.Ingreso!.Paciente.Cuil, _ultimoResultado.Ingreso.Paciente.Nombre);
         Assert.True(_ultimoResultado!.EsExitoso);
+        Assert.NotNull(_ultimoResultado.Ingreso);
+        Assert.NotNull(_ultimoResultado.Ingreso.Paciente);
     }
 
     [Then(@"se emite un mensaje de error indicando que el informe es obligatorio")]
@@ -357,11 +399,11 @@ public class RegistrarIngresoStepDefinitions
         Assert.Contains("informe es obligatorio", _ultimoResultado.MensajeError!);
     }
 
-    [Then(@"se emite un mensaje de error indicando que la frecuencia cardÌaca no puede ser negativa")]
+    [Then(@"se emite un mensaje de error indicando que la frecuencia card√≠aca no puede ser negativa")]
     public void EntoncesSeEmiteUnMensajeDeErrorIndicandoQueLaFrecuenciaCardiacaNoPuedeSerNegativa()
     {
         Assert.False(_ultimoResultado!.EsExitoso);
-        Assert.Contains("frecuencia cardÌaca no puede ser negativa", _ultimoResultado.MensajeError!);
+        Assert.Contains("frecuencia card√≠aca no puede ser negativa", _ultimoResultado.MensajeError!);
     }
 
     [Then(@"se emite un mensaje de error indicando que la frecuencia respiratoria no puede ser negativa")]

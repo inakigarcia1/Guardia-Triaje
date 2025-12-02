@@ -57,7 +57,7 @@ public class AuthController : ControllerBase
     [Authorize]
     public IActionResult QuienSoy()
     {
-        var username = User.Identity?.Name;
-        return Ok(new { Message = $"Estás autenticado como: {username}"});
+        var email = User.Identity?.Name;
+        return Ok(new { Message = $"Estás autenticado como: {email}"});
     }
 }

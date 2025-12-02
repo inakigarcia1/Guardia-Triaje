@@ -7,5 +7,6 @@ public interface IIngresoService
 {
     Task<ResultadoIngreso> RegistrarIngresoAsync(RegistroIngresoRequest request);
     Task<List<Ingreso>> ObtenerColaAtencionAsync();
+    Task<PacienteDto?> BuscarPacientePorCuilAsync(string cuil);
 }
 

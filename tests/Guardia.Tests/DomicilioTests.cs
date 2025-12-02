@@ -55,36 +55,6 @@ public class DomicilioTests
     }
 
     [Fact]
-    public void CrearDomicilio_ConCalleConSimbolos_DeberiaLanzarExcepcion()
-    {
-        // Arrange
-        var calle = "San@Martin";
-        var numero = 123;
-        var localidad = "San Miguel de Tucuman";
-
-        // Act
-        var exception = Assert.Throws<DominioException>(() => new Domicilio(calle, numero, localidad));
-
-        // Assert
-        Assert.Equal("La calle no puede contener caracteres especiales", exception.Message);
-    }
-
-    [Fact]
-    public void CrearDomicilio_ConCalleConPuntuacion_DeberiaLanzarExcepcion()
-    {
-        // Arrange
-        var calle = "San.Martin";
-        var numero = 123;
-        var localidad = "San Miguel de Tucuman";
-
-        // Act
-        var exception = Assert.Throws<DominioException>(() => new Domicilio(calle, numero, localidad));
-
-        // Assert
-        Assert.Equal("La calle no puede contener caracteres especiales", exception.Message);
-    }
-
-    [Fact]
     public void CrearDomicilio_ConNumeroCero_DeberiaLanzarExcepcion()
     {
         // Arrange
@@ -144,34 +114,5 @@ public class DomicilioTests
         Assert.Equal("La localidad no puede estar vacía", exception.Message);
     }
 
-    [Fact]
-    public void CrearDomicilio_ConLocalidadConSimbolos_DeberiaLanzarExcepcion()
-    {
-        // Arrange
-        var calle = "San Martin";
-        var numero = 123;
-        var localidad = "San@Miguel";
-
-        // Act
-        var exception = Assert.Throws<DominioException>(() => new Domicilio(calle, numero, localidad));
-
-        // Assert
-        Assert.Equal("La localidad no puede contener caracteres especiales", exception.Message);
-    }
-
-    [Fact]
-    public void CrearDomicilio_ConLocalidadConPuntuacion_DeberiaLanzarExcepcion()
-    {
-        // Arrange
-        var calle = "San Martin";
-        var numero = 123;
-        var localidad = "San.Miguel";
-
-        // Act
-        var exception = Assert.Throws<DominioException>(() => new Domicilio(calle, numero, localidad));
-
-        // Assert
-        Assert.Equal("La localidad no puede contener caracteres especiales", exception.Message);
-    }
 }
 

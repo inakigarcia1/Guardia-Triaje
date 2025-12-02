@@ -60,7 +60,7 @@ public class AtencionService : IAtencionService
     public async Task RegistrarAtencion(RegistroAtencionDto dto)
     {
         var ingreso = await _repositorioIngreso.ObtenerPorIdAsync(dto.IngresoId);
-        if (ingreso == null)
+        if (ingreso is null)
         {
             throw new InvalidOperationException("Ingreso no encontrado");
         }
@@ -72,15 +72,13 @@ public class AtencionService : IAtencionService
         }
 
         var medico = await _repositorioMedico.ObtenerPorMatriculaAsync(matricula);
-        if (medico == null)
+        if (medico is null)
         {
             throw new InvalidOperationException("Médico no encontrado");
         }
 
         var atencion = new Atencion
         {
-            Inicio = dto.Inicio,
-            Fin = dto.Fin,
             DiagnosticoPresuntivo = dto.DiagnosticoPresuntivo,
             ProcedimientoRealizado = dto.ProcedimientoRealizado,
             Observaciones = dto.Observaciones,
@@ -99,8 +97,7 @@ public class AtencionService : IAtencionService
         var atenciones = await _repositorioAtencion.ObtenerTodosAsync();
         return atenciones.Select(a => new AtencionDto
         {
-            Inicio = a.Inicio,
-            Fin = a.Fin,
+            CreadoEn = a.CreadoEn,
             DiagnosticoPresuntivo = a.DiagnosticoPresuntivo,
             ProcedimientoRealizado = a.ProcedimientoRealizado,
             Observaciones = a.Observaciones,

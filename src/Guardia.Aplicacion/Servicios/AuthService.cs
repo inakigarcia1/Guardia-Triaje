@@ -1,7 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Guardia.Aplicacion.DTOs;
 using Guardia.Dominio.Entidades.Personal;
 using Guardia.Dominio.Repositorios;
 using Microsoft.AspNetCore.Identity;
@@ -34,14 +33,14 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse> LoginAsync(LoginDto loginDto)
     {
-        var user = await _userManager.FindByNameAsync(loginDto.Username);
+        var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
         if (user is null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
         {
             return new AuthResponse(
                 EsExitoso: false,
                 Token: string.Empty,
-                Username: user?.UserName ?? string.Empty,
+                Email: loginDto.Email,
                 Errores: ["Usuario o contraseña no válidos."]);
         }
         var token = await GenerateJwtTokenAsync(user);
@@ -49,7 +48,7 @@ public class AuthService : IAuthService
         return new AuthResponse(
             EsExitoso: true,
             Token: token,
-            Username: user.UserName ?? string.Empty,
+            Email: user.Email ?? string.Empty,
             Errores: [],
             Rol: roles.FirstOrDefault()
             );
@@ -57,7 +56,7 @@ public class AuthService : IAuthService
 
     public async Task<RegisterResponse> RegistrarAsync(RegistroUsuarioDto registroUsuarioDto, string rol)
     {
-        var user = new IdentityUser { UserName = registroUsuarioDto.Username, Email = registroUsuarioDto.Email };
+        var user = new IdentityUser { UserName = registroUsuarioDto.Email, Email = registroUsuarioDto.Email };
         var result = await _userManager.CreateAsync(user, registroUsuarioDto.Password);
 
         var errores = result.Errors.Select(e => e.Description).ToList();
@@ -78,13 +77,13 @@ public class AuthService : IAuthService
         {
             case "Enfermero":
                 {
-                    var enfermero = new Enfermero(registroUsuarioDto.Cuil, registroUsuarioDto.Username, registroUsuarioDto.Matricula);
+                    var enfermero = new Enfermero(registroUsuarioDto.Cuil, registroUsuarioDto.Nombre, registroUsuarioDto.Apellido, registroUsuarioDto.Email, registroUsuarioDto.Matricula);
                     await _repositorioEnfermero.CrearAsync(enfermero);
                     break;
                 }
             case "Medico":
                 {
-                    var medico = new Medico(registroUsuarioDto.Cuil, registroUsuarioDto.Username, registroUsuarioDto.Matricula);
+                    var medico = new Medico(registroUsuarioDto.Cuil, registroUsuarioDto.Nombre, registroUsuarioDto.Apellido, registroUsuarioDto.Email, registroUsuarioDto.Matricula);
                     await _repositorioMedico.CrearAsync(medico);
                     break;
                 }
@@ -92,7 +91,7 @@ public class AuthService : IAuthService
         
         return new RegisterResponse(
                 EsExitoso: true,
-                Mensaje: $"Usuario '{user.UserName}' con rol '{rol}' creado con éxito.",
+                Mensaje: $"Usuario '{registroUsuarioDto.Email}' con rol '{rol}' creado con éxito.",
                 Errores: errores
         );
     }
@@ -101,7 +100,7 @@ public class AuthService : IAuthService
     {
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Name, user.UserName!),
+            new(ClaimTypes.Name, user.Email!),
             new(ClaimTypes.NameIdentifier, user.Id),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };

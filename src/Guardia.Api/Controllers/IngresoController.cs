@@ -1,3 +1,4 @@
+using FluentValidation;
 using Guardia.Aplicacion.DTOs;
 using Guardia.Aplicacion.Servicios;
 using Microsoft.AspNetCore.Authorization;
@@ -18,8 +19,13 @@ public class IngresoController : ControllerBase
     
     [HttpPost("registrar")]
     [Authorize(Roles = "Enfermero")]
-    public async Task<IActionResult> RegistrarIngreso([FromBody] RegistroIngresoRequest request)
+    public async Task<IActionResult> RegistrarIngreso([FromBody] RegistroIngresoRequest request, [FromServices] IValidator<RegistroIngresoRequest> validator)
     {
+        var resultadoValidacion = await validator.ValidateAsync(request);
+        if (!resultadoValidacion.IsValid)
+        {
+            return BadRequest(resultadoValidacion.Errors.Select(e => e.ErrorMessage));
+        }
         var matricula = User.Claims.FirstOrDefault(c => c.Type == "Matricula")?.Value;
         if(matricula is null)
         {
@@ -90,5 +96,23 @@ public class IngresoController : ControllerBase
         }).ToList();
 
         return Ok(colaResponse);
+    }
+
+    [HttpGet("buscar-por-cuil")]
+    [Authorize(Roles = "Enfermero")]
+    public async Task<IActionResult> BuscarPacientePorCuil([FromQuery] string cuil)
+    {
+        if (string.IsNullOrWhiteSpace(cuil))
+        {
+            return BadRequest(new { error = "El CUIL es obligatorio" });
+        }
+
+        var paciente = await _ingresoService.BuscarPacientePorCuilAsync(cuil);
+        if (paciente is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(paciente);
     }
 }

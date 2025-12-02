@@ -28,7 +28,6 @@ public abstract class Persona
         set
         {
             if(string.IsNullOrWhiteSpace(value)) throw new DominioException("El nombre de la persona no puede estar vacío");
-            if (value.Any(char.IsSymbol) || value.Any(char.IsPunctuation)) throw new DominioException("El nombre no puede contener caracteres especiales");
             _nombre = value;
         }
     }
@@ -39,7 +38,6 @@ public abstract class Persona
         set
         {
             if (string.IsNullOrWhiteSpace(value)) throw new DominioException("El apellido de la persona no puede estar vacío");
-            if (value.Any(char.IsSymbol) || value.Any(char.IsPunctuation)) throw new DominioException("El apellido no puede contener caracteres especiales");
             _apellido = value;
         }
     }
@@ -61,11 +59,5 @@ public abstract class Persona
         Nombre = nombre;
         Apellido = apellido;
         Email = email;
-    }
-
-    protected Persona(string cuil, string nombre)
-    {
-        Cuil = cuil;
-        Nombre = nombre;
     }
 }

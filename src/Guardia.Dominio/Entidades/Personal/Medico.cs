@@ -8,10 +8,6 @@ public class Medico : Persona
     {
         Matricula = matricula;
     }
-    public Medico(string cuil, string nombre, string matricula) : base(cuil, nombre)
-    {
-        Matricula = matricula;
-    }
 
     public void RegistrarAtencion(Atencion atencion)
     {
