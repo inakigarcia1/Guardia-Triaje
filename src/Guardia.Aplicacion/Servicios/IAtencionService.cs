@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Guardia.Aplicacion.Servicios;
+﻿namespace Guardia.Aplicacion.Servicios;
 public interface IAtencionService
 {
     Task<IngresoSiguienteDto?> ReclamarSiguiente();
