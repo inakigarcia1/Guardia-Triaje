@@ -1,4 +1,4 @@
-﻿namespace Guardia.Dominio.Entidades.Triajes;
+﻿namespace Guardia.Dominio.Entidades;
 public enum PrioridadTriaje
 {
     Critico = 1,

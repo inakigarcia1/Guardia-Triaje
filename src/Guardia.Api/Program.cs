@@ -1,6 +1,7 @@
 using System.Text;
 using Guardia.Api.Helpers;
 using Guardia.Aplicacion;
+using Guardia.Aplicacion.Servicios;
 using Guardia.Infraestructura;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;

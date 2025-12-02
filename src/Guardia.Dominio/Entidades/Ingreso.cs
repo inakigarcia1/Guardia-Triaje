@@ -1,5 +1,4 @@
 ﻿using Guardia.Dominio.Entidades.Personal;
-using Guardia.Dominio.Entidades.Triajes;
 
 namespace Guardia.Dominio.Entidades;
 

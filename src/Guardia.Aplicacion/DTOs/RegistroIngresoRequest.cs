@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using Guardia.Dominio.Entidades.Triajes;
+using Guardia.Dominio.Entidades;
 
 namespace Guardia.Aplicacion.DTOs;
 
